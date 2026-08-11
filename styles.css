@@ -96,6 +96,15 @@ body {
   opacity: 0;
 }
 
+.heading {
+  font-size: clamp(1.05rem, 3vw, 1.45rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--brand-blue-deep);
+  max-width: 34rem;
+  opacity: 0;
+}
+
 .contacts {
   display: flex;
   flex-direction: column;
@@ -183,6 +192,10 @@ body {
   animation: rise-in 0.7s var(--ease-out) 0.15s both;
 }
 
+.is-ready .heading {
+  animation: rise-in 0.7s var(--ease-out) 0.05s both;
+}
+
 .is-ready .contact:nth-child(1) {
   animation: rise-in 0.65s var(--ease-out) 0.3s both;
 }
@@ -214,6 +227,7 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .logo,
+  .heading,
   .blurb,
   .contact,
   .footer {
