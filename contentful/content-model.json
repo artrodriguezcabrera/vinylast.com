@@ -1,0 +1,152 @@
+{
+  "space": "Create these content types in Contentful (Content model).",
+  "types": [
+    {
+      "id": "category",
+      "name": "Category",
+      "displayField": "name",
+      "fields": [
+        { "id": "name", "name": "Name", "type": "Symbol", "required": true },
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "required": true,
+          "validations": [{ "unique": true }]
+        },
+        {
+          "id": "image",
+          "name": "Image",
+          "type": "Link",
+          "linkType": "Asset",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "product",
+      "name": "Product",
+      "displayField": "name",
+      "fields": [
+        { "id": "name", "name": "Name", "type": "Symbol", "required": true },
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "required": true,
+          "validations": [{ "unique": true }]
+        },
+        {
+          "id": "category",
+          "name": "Category",
+          "type": "Link",
+          "linkType": "Entry",
+          "validations": [{ "linkContentType": ["category"] }]
+        },
+        { "id": "series", "name": "Series", "type": "Symbol" },
+        {
+          "id": "shortDescription",
+          "name": "Short description",
+          "type": "Text",
+          "required": true
+        },
+        { "id": "body", "name": "Body", "type": "RichText" },
+        {
+          "id": "hero",
+          "name": "Hero image",
+          "type": "Link",
+          "linkType": "Asset"
+        },
+        {
+          "id": "gallery",
+          "name": "Gallery",
+          "type": "Array",
+          "items": { "type": "Link", "linkType": "Asset" }
+        },
+        {
+          "id": "features",
+          "name": "Key features",
+          "type": "Array",
+          "items": { "type": "Symbol" }
+        },
+        {
+          "id": "specs",
+          "name": "Specs",
+          "type": "Text",
+          "helpText": "One per line: Label: Value"
+        },
+        {
+          "id": "videos",
+          "name": "Videos",
+          "type": "Text",
+          "helpText": "One per line: Title | https://youtube.com/watch?v=..."
+        },
+        {
+          "id": "relatedResources",
+          "name": "Related resources",
+          "type": "Array",
+          "items": {
+            "type": "Link",
+            "linkType": "Entry",
+            "validations": [{ "linkContentType": ["resource"] }]
+          }
+        },
+        { "id": "featured", "name": "Featured on home", "type": "Boolean" }
+      ]
+    },
+    {
+      "id": "resource",
+      "name": "Resource",
+      "displayField": "title",
+      "fields": [
+        { "id": "title", "name": "Title", "type": "Symbol", "required": true },
+        {
+          "id": "slug",
+          "name": "Slug",
+          "type": "Symbol",
+          "required": true,
+          "validations": [{ "unique": true }]
+        },
+        {
+          "id": "type",
+          "name": "Type",
+          "type": "Symbol",
+          "required": true,
+          "validations": [
+            {
+              "in": ["install", "spec", "warranty", "catalog", "video", "other"]
+            }
+          ]
+        },
+        {
+          "id": "thumbnail",
+          "name": "Thumbnail",
+          "type": "Link",
+          "linkType": "Asset"
+        },
+        {
+          "id": "file",
+          "name": "File (PDF)",
+          "type": "Link",
+          "linkType": "Asset"
+        },
+        { "id": "videoUrl", "name": "Video URL", "type": "Symbol" },
+        {
+          "id": "shortDescription",
+          "name": "Short description",
+          "type": "Text"
+        },
+        {
+          "id": "relatedProducts",
+          "name": "Related products",
+          "type": "Array",
+          "items": {
+            "type": "Link",
+            "linkType": "Entry",
+            "validations": [{ "linkContentType": ["product"] }]
+          }
+        }
+      ]
+    }
+  ]
+}

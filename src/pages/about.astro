@@ -1,0 +1,90 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CtaBand from "../components/CtaBand.astro";
+import { site } from "../lib/site";
+---
+
+<Layout
+  title="About"
+  description="Vinylast Inc. is a family-owned vinyl railing and fencing supplier for contractors, based in Lakewood, NJ since 1974."
+  currentPath="/about"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Our story</p>
+      <h1>Family-owned. Contractor-focused. Since 1974.</h1>
+      <p>
+        Vinylast Inc. started in 1974. We design and manufacture products for the
+        decking, railing, and fencing trades — and we still answer the phone.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap split-2">
+      <div class="prose">
+        <h2>Who we are</h2>
+        <p>
+          Vinylast is a family-owned and operated business proudly supplying
+          contractors with all their vinyl railing and fencing needs since 1974.
+        </p>
+        <p>
+          We have been innovating, designing, and manufacturing products in the
+          decking and railing industries for decades. We offer patented products
+          including ADA handrail components and CCRR deck post mounts. Our ADA
+          parts include die-cast, extruded, and stamped components that support
+          many decking and railing systems.
+        </p>
+        <p>
+          Working with our customers, we supply not only products but solutions —
+          designs that install easier, hold stronger, and above all, stay safer.
+        </p>
+      </div>
+      <div class="prose">
+        <h2>What we supply</h2>
+        <p>
+          A full line of vinyl and structural products for contractors, including:
+        </p>
+        <ul>
+          <li>Vinyl fencing and railing</li>
+          <li>Windows and doors</li>
+          <li>Structural posts and columns</li>
+          <li>Pergolas</li>
+          <li>ADA handrail components</li>
+          <li>Deck post mounts</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-muted">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>How we work</h2>
+          <p>Making products that solve problems is what we do best.</p>
+        </div>
+      </div>
+      <div class="value-grid">
+        <article class="value-card">
+          <h3>Job-built products</h3>
+          <p>We design for installers: clear hardware, fewer steps, and details that survive weather and inspection.</p>
+        </article>
+        <article class="value-card">
+          <h3>Tested to code</h3>
+          <p>
+            Vinylast works with accredited testing facilities so products meet current building codes — not last year’s.
+          </p>
+        </article>
+        <article class="value-card">
+          <h3>Direct from Lakewood</h3>
+          <p>
+            Headquarters at {site.address}. Call {site.phone} or email {site.email}. {site.spanish}.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Build with us" text="Tell us what you are installing. We will point you to the right product and paperwork." />
+</Layout>

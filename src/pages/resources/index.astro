@@ -1,0 +1,56 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ResourceCard from "../../components/ResourceCard.astro";
+import EmptyState from "../../components/EmptyState.astro";
+import { getResources } from "../../lib/contentful";
+import { resourceTypeLabels, resourceTypeOrder, type ResourceType } from "../../lib/types";
+
+const resources = await getResources();
+const groups = resourceTypeOrder
+  .map((type) => ({
+    type,
+    label: resourceTypeLabels[type as ResourceType],
+    items: resources.filter((resource) => resource.type === type),
+  }))
+  .filter((group) => group.items.length > 0);
+---
+
+<Layout
+  title="Resources"
+  description="Download Vinylast installation guides, spec sheets, warranties, catalogs, and videos."
+  currentPath="/resources"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Downloads</p>
+      <h1>Resources</h1>
+      <p>Installation documents, test reports, catalogs, and videos — grouped so you can find the file fast.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap resource-groups">
+      {
+        resources.length === 0 ? (
+          <EmptyState
+            title="No resources published yet"
+            message="PDFs and videos added in Contentful will appear here after the next site build."
+          />
+        ) : (
+          groups.map((group) => (
+            <section>
+              <div class="section-head">
+                <h2>{group.label}</h2>
+              </div>
+              <div class="cards">
+                {group.items.map((resource) => (
+                  <ResourceCard resource={resource} />
+                ))}
+              </div>
+            </section>
+          ))
+        )
+      }
+    </div>
+  </section>
+</Layout>

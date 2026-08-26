@@ -1,0 +1,86 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ProductCard from "../../components/ProductCard.astro";
+import EmptyState from "../../components/EmptyState.astro";
+import { getCategories, getProducts } from "../../lib/contentful";
+
+const products = await getProducts();
+const categories = await getCategories();
+---
+
+<Layout
+  title="Products"
+  description="Vinyl railing, fencing, posts, and structural products from Vinylast Inc."
+  currentPath="/products"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Catalog</p>
+      <h1>Products</h1>
+      <p>Specs, photos, and downloads for the products we supply to contractors.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      {
+        products.length === 0 ? (
+          <EmptyState
+            title="No products published yet"
+            message="When products are added and published in Contentful, they will show up here after the site rebuilds."
+          />
+        ) : (
+          <>
+            {categories.length > 1 && (
+              <div class="filters" role="toolbar" aria-label="Filter products">
+                <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">
+                  All
+                </button>
+                {categories.map((category) => (
+                  <button class="filter-btn" type="button" data-filter={category.slug} aria-pressed="false">
+                    {category.name}
+                  </button>
+                ))}
+              </div>
+            )}
+            <div class="cards" id="product-grid">
+              {products.map((product) => (
+                <ProductCard product={product} />
+              ))}
+            </div>
+          </>
+        )
+      }
+    </div>
+  </section>
+</Layout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  const cards = document.querySelectorAll<HTMLElement>("#product-grid .card");
+
+  function applyFilter(filter: string) {
+    const next = filter || "all";
+    buttons.forEach((item) => {
+      item.setAttribute("aria-pressed", item.dataset.filter === next ? "true" : "false");
+    });
+    cards.forEach((card) => {
+      const category = card.dataset.category || "all";
+      const show = next === "all" || category === next;
+      card.classList.toggle("is-filtered-out", !show);
+      card.hidden = !show;
+    });
+
+    const url = new URL(window.location.href);
+    if (next === "all") url.searchParams.delete("category");
+    else url.searchParams.set("category", next);
+    history.replaceState({}, "", url);
+  }
+
+  const initial = new URLSearchParams(window.location.search).get("category") || "all";
+  applyFilter(initial);
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => applyFilter(button.dataset.filter || "all"));
+  });
+</script>

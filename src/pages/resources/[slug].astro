@@ -1,0 +1,95 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getResourceBySlug, getResources, youtubeEmbedUrl } from "../../lib/contentful";
+import { resourceTypeLabels } from "../../lib/types";
+
+export async function getStaticPaths() {
+  const resources = await getResources();
+  return resources.map((resource) => ({
+    params: { slug: resource.slug },
+    props: { slug: resource.slug },
+  }));
+}
+
+const { slug } = Astro.props;
+const resource = await getResourceBySlug(slug);
+
+if (!resource) {
+  return Astro.redirect("/resources");
+}
+
+const embed = resource.videoUrl ? youtubeEmbedUrl(resource.videoUrl) : "";
+---
+
+<Layout
+  title={resource.title}
+  description={resource.shortDescription || `${resource.title} from Vinylast Inc.`}
+  currentPath={`/resources/${resource.slug}`}
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/resources">Resources</a>
+        <span>/</span>
+        <span>{resource.title}</span>
+      </nav>
+
+      <p class="card-kicker">{resourceTypeLabels[resource.type]}</p>
+      <h1 style="font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing: -0.03em; margin: 0.35rem 0 1rem">
+        {resource.title}
+      </h1>
+      {resource.shortDescription && <p class="lede">{resource.shortDescription}</p>}
+
+      <div class="btn-row" style="margin: 1.25rem 0 1.75rem">
+        {
+          resource.file && (
+            <a class="btn btn-primary" href={resource.file.url} download>
+              Download PDF
+            </a>
+          )
+        }
+        <a class="btn btn-outline" href="/contact">Questions? Contact us</a>
+      </div>
+
+      {
+        embed && (
+          <iframe
+            class="video-frame"
+            src={embed}
+            title={resource.title}
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          />
+        )
+      }
+
+      {
+        !embed && resource.thumbnail && (
+          <img
+            src={resource.thumbnail.url}
+            alt={resource.thumbnail.alt}
+            width={resource.thumbnail.width}
+            height={resource.thumbnail.height}
+            style="max-width: 42rem; border-radius: 0.35rem; border: 1px solid var(--border)"
+          />
+        )
+      }
+
+      {
+        resource.relatedProducts.length > 0 && (
+          <p style="margin-top: 1.5rem">
+            Related products:{" "}
+            {resource.relatedProducts.map((product, index) => (
+              <>
+                {index > 0 && " · "}
+                <a href={`/products/${product.slug}`}>{product.name}</a>
+              </>
+            ))}
+          </p>
+        )
+      }
+    </div>
+  </section>
+</Layout>

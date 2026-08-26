@@ -1,0 +1,31 @@
+---
+import { resourceTypeLabels, type Resource } from "../lib/types";
+
+interface Props {
+  resource: Resource;
+}
+
+const { resource } = Astro.props;
+const href = `/resources/${resource.slug}`;
+---
+
+<a class="card" href={href}>
+  {
+    resource.thumbnail && (
+      <div class="card-media">
+        <img
+          src={resource.thumbnail.url}
+          alt={resource.thumbnail.alt}
+          width={resource.thumbnail.width}
+          height={resource.thumbnail.height}
+        />
+      </div>
+    )
+  }
+  <div class="card-body">
+    <p class="card-kicker">{resourceTypeLabels[resource.type]}</p>
+    <h3>{resource.title}</h3>
+    {resource.shortDescription && <p>{resource.shortDescription}</p>}
+    <span class="card-link">{resource.file ? "View & download" : "View resource"}</span>
+  </div>
+</a>

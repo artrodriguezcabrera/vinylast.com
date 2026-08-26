@@ -1,0 +1,32 @@
+---
+import type { Product } from "../lib/types";
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+---
+
+<a class="card" href={`/products/${product.slug}`} data-category={product.category?.slug || "all"}>
+  <div class:list={["card-media", { "is-placeholder": !product.hero }]}>
+    {
+      product.hero ? (
+        <img src={product.hero.url} alt={product.hero.alt} width={product.hero.width} height={product.hero.height} />
+      ) : (
+        <span>{product.category?.name || "Product"}</span>
+      )
+    }
+  </div>
+  <div class="card-body">
+    {product.category && (
+      <p class="card-kicker">
+        {product.category.name}
+        {product.series ? ` · ${product.series}` : ""}
+      </p>
+    )}
+    <h3>{product.name}</h3>
+    <p>{product.shortDescription}</p>
+    <span class="card-link">View product</span>
+  </div>
+</a>

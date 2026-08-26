@@ -1,0 +1,190 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import ResourceCard from "../../components/ResourceCard.astro";
+import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../lib/contentful";
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { slug: product.slug },
+  }));
+}
+
+const { slug } = Astro.props;
+const product = await getProductBySlug(slug);
+
+if (!product) {
+  return Astro.redirect("/products");
+}
+
+const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
+---
+
+<Layout
+  title={product.name}
+  description={product.shortDescription || `${product.name} from Vinylast Inc.`}
+  currentPath={`/products/${product.slug}`}
+>
+  <section class="section">
+    <div class="wrap">
+      <nav class="crumb" aria-label="Breadcrumb">
+        <a href="/">Home</a>
+        <span>/</span>
+        <a href="/products">Products</a>
+        {
+          product.category && (
+            <>
+              <span>/</span>
+              <a href={`/products?category=${product.category.slug}`}>{product.category.name}</a>
+            </>
+          )
+        }
+        <span>/</span>
+        <span>{product.name}</span>
+      </nav>
+
+      <div class:list={["product-layout", { "is-copy-only": thumbs.length === 0 }]}>
+        <div>
+          {
+            thumbs.length > 0 && (
+              <>
+                <div class="gallery-main">
+                  <img
+                    id="gallery-image"
+                    src={thumbs[0].url}
+                    alt={thumbs[0].alt}
+                    width={thumbs[0].width}
+                    height={thumbs[0].height}
+                  />
+                </div>
+                {thumbs.length > 1 && (
+                  <div class="thumbs">
+                    {thumbs.map((image, index) => (
+                      <button type="button" data-src={image.url} data-alt={image.alt} aria-current={index === 0 ? "true" : undefined}>
+                        <img src={image.url} alt="" width={image.width} height={image.height} />
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </>
+            )
+          }
+        </div>
+        <div class="product-copy">
+          {(product.category || product.series) && (
+            <p class="card-kicker">
+              {[product.category?.name, product.series].filter(Boolean).join(" · ")}
+            </p>
+          )}
+          <h1>{product.name}</h1>
+          <p class="lede">{product.shortDescription}</p>
+          <div class="btn-row" style="margin: 1.1rem 0 1.5rem">
+            <a class="btn btn-primary" href="/contact">Contact us about this product</a>
+            {product.relatedResources[0]?.file && (
+              <a class="btn btn-outline" href={product.relatedResources[0].file.url}>
+                Download spec
+              </a>
+            )}
+          </div>
+          {
+            product.features.length > 0 && (
+              <>
+                <h2>Key features</h2>
+                <ul class="feature-list">
+                  {product.features.map((feature) => (
+                    <li>{feature}</li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {
+    product.bodyHtml && (
+      <section class="section section-muted">
+        <div class="wrap prose">
+          <h2>Details</h2>
+          <Fragment set:html={product.bodyHtml} />
+        </div>
+      </section>
+    )
+  }
+
+  {
+    product.specs.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <h2>Specifications</h2>
+          <table class="specs">
+            <tbody>
+              {product.specs.map((spec) => (
+                <tr>
+                  <th scope="row">{spec.name}</th>
+                  <td>{spec.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    product.videos.length > 0 && (
+      <section class="section section-muted">
+        <div class="wrap">
+          <h2>Installation videos</h2>
+          <div class="video-grid" style="margin-top: 1rem">
+            {product.videos.map((video) => (
+              <div>
+                <iframe
+                  class="video-frame"
+                  src={youtubeEmbedUrl(video.url)}
+                  title={video.title}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowfullscreen
+                />
+                <p style="margin-top: 0.5rem">{video.title}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  {
+    product.relatedResources.length > 0 && (
+      <section class="section">
+        <div class="wrap">
+          <h2>Downloads &amp; resources</h2>
+          <div class="cards" style="margin-top: 1.25rem">
+            {product.relatedResources.map((resource) => (
+              <ResourceCard resource={resource} />
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+</Layout>
+
+<script>
+  const main = document.querySelector<HTMLImageElement>("#gallery-image");
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".thumbs button");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      if (!main) return;
+      main.src = button.dataset.src || main.src;
+      main.alt = button.dataset.alt || main.alt;
+      buttons.forEach((item) => item.removeAttribute("aria-current"));
+      button.setAttribute("aria-current", "true");
+    });
+  });
+</script>

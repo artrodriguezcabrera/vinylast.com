@@ -1,0 +1,226 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ProductCard from "../components/ProductCard.astro";
+import CtaBand from "../components/CtaBand.astro";
+import EmptyState from "../components/EmptyState.astro";
+import { getFeaturedProducts, getResources } from "../lib/contentful";
+import { site } from "../lib/site";
+
+const featured = await getFeaturedProducts();
+const resources = (await getResources()).slice(0, 3);
+
+const heroSlides = [
+  {
+    url: "/images/products/t-rail/vinyl-railing-with-t-rail-top-03.jpg",
+    alt: "White vinyl T-Rail on a two-story porch",
+  },
+  {
+    url: "/images/products/3000-series/3000-superior-1.jpg",
+    alt: "3000 Series vinyl railing on a large deck",
+  },
+  {
+    url: "/images/products/keylargo/imperial-vinyl-yard-fence-5.jpg",
+    alt: "Keylargo closed picket vinyl fence",
+  },
+  {
+    url: "/images/products/difinity/boston-vinyl-privacy-fence-4.jpg",
+    alt: "Difinity vinyl privacy fence",
+  },
+  {
+    url: "/images/products/ranch-rail/2-rail-post-rail-vinyl-fence-3.jpg",
+    alt: "Ranch Rail post-and-rail vinyl fence",
+  },
+  {
+    url: "/images/products/pergola/1-4.jpg",
+    alt: "Vinyl pergola over an outdoor living space",
+  },
+];
+---
+
+<Layout title={site.name} description={site.description} currentPath="/">
+  <section class="hero" aria-roledescription="carousel" aria-label="Product photos">
+    <div class="hero-viewport">
+      <div class="hero-track" id="hero-track">
+        {
+          [...heroSlides, heroSlides[0]].map((slide, index) => (
+            <div
+              class="hero-slide"
+              style={`background-image: url('${slide.url}')`}
+              role="img"
+              aria-label={slide.alt}
+              aria-hidden={index === 0 ? undefined : "true"}
+            />
+          ))
+        }
+      </div>
+    </div>
+    <div class="hero-overlay"></div>
+    <div class="wrap hero-copy">
+      <p class="eyebrow">Since 1974 · Lakewood, NJ</p>
+      <h1>Vinyl railing and fencing for contractors</h1>
+      <p>
+        Family-owned and operated. We supply contractors with vinyl railing, fencing,
+        posts, and structural products — built to install cleanly and hold up on the job.
+      </p>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="/products">View products</a>
+        <a class="btn btn-ghost" href="/contact">Contact us</a>
+      </div>
+    </div>
+    <div class="hero-dots" role="tablist" aria-label="Hero slides">
+      {
+        heroSlides.map((slide, index) => (
+          <button
+            type="button"
+            class="hero-dot"
+            data-slide={index}
+            aria-label={`Show photo ${index + 1}: ${slide.alt}`}
+            aria-selected={index === 0 ? "true" : "false"}
+          />
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="trust">
+    <div class="wrap trust-grid">
+      <div class="trust-item">
+        <strong>Since 1974</strong>
+        <span>Family-owned &amp; operated</span>
+      </div>
+      <div class="trust-item">
+        <strong>Contractor supply</strong>
+        <span>Railing, fencing, and more</span>
+      </div>
+      <div class="trust-item">
+        <strong>Code-minded</strong>
+        <span>Tested structural products</span>
+      </div>
+      <div class="trust-item">
+        <strong>{site.spanish}</strong>
+        <span>Call {site.phone}</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Products</h2>
+          <p>Straightforward product pages with specs, photos, and downloads — made for the jobsite, not a brochure.</p>
+        </div>
+        <a class="btn btn-outline" href="/products">All products</a>
+      </div>
+      {
+        featured.length ? (
+          <div class="cards">
+            {featured.map((product) => (
+              <ProductCard product={product} />
+            ))}
+          </div>
+        ) : (
+          <EmptyState
+            title="Product catalog coming next"
+            message="Add products in Contentful and they will appear here after the next site build."
+          />
+        )
+      }
+    </div>
+  </section>
+
+  <section class="section section-muted">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Resources</h2>
+          <p>Installation guides, spec sheets, and videos. Download what you need and get back to work.</p>
+        </div>
+        <a class="btn btn-outline" href="/resources">All resources</a>
+      </div>
+      <div class="promo-grid">
+        <a class="promo" href="/resources" style="background-image: url('/images/cta-docs.jpg')">
+          <div>
+            <h3>Downloads</h3>
+            <p>Install sheets, reports, and catalogs.</p>
+          </div>
+        </a>
+        <a class="promo" href="/resources" style="background-image: url('/images/cta-videos.jpg')">
+          <div>
+            <h3>Installation videos</h3>
+            <p>English and Spanish walkthroughs.</p>
+          </div>
+        </a>
+        <a class="promo" href="/contact" style="background-image: url('/images/cta-contact.jpg')">
+          <div>
+            <h3>Talk to Vinylast</h3>
+            <p>Call, email, or send a message.</p>
+          </div>
+        </a>
+      </div>
+      {
+        resources.length > 0 && (
+          <p class="lede" style="margin-top: 1.5rem">
+            Latest files: {resources.map((r) => r.title).join(" · ")}
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <CtaBand
+    title="Need a product or a spec sheet?"
+    text={`Call ${site.phone} or send a note. We work with contractors every day.`}
+  />
+</Layout>
+
+<script>
+  const INTERVAL_MS = 6000;
+  const track = document.querySelector<HTMLElement>("#hero-track");
+  const dots = [...document.querySelectorAll<HTMLButtonElement>(".hero-dot")];
+  const count = dots.length;
+
+  if (track && count > 1 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const slideTrack = track;
+    let index = 0;
+    let timer = 0;
+
+    function setDots(active: number) {
+      dots.forEach((dot, i) => {
+        dot.setAttribute("aria-selected", i === active ? "true" : "false");
+      });
+    }
+
+    function goTo(next: number, animate = true) {
+      index = next;
+      slideTrack.style.transition = animate ? "transform 0.85s cubic-bezier(0.22, 1, 0.36, 1)" : "none";
+      slideTrack.style.transform = `translateX(-${index * 100}%)`;
+      if (!animate) void slideTrack.offsetWidth;
+      setDots(index % count);
+    }
+
+    function advance() {
+      goTo(index + 1);
+    }
+
+    slideTrack.addEventListener("transitionend", () => {
+      if (index < count) return;
+      goTo(0, false);
+    });
+
+    function start() {
+      window.clearInterval(timer);
+      timer = window.setInterval(advance, INTERVAL_MS);
+    }
+
+    dots.forEach((dot) => {
+      dot.addEventListener("click", () => {
+        const next = Number(dot.dataset.slide || 0);
+        goTo(next);
+        start();
+      });
+    });
+
+    start();
+  }
+</script>
