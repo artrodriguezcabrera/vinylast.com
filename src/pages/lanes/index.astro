@@ -1,0 +1,78 @@
+---
+import LanesLayout from "../../layouts/LanesLayout.astro";
+import LanesProductCard from "../../components/lanes/LanesProductCard.astro";
+import { getFeaturedProducts } from "../../lib/contentful";
+import { lanesHeroSlides, lanesHref } from "../../lib/lanes";
+import { site } from "../../lib/site";
+
+const featured = await getFeaturedProducts();
+---
+
+<LanesLayout title={site.name} description={site.description} currentPath={lanesHref("/")} transparentHeader>
+  <div class="slider-activation">
+    {
+      lanesHeroSlides.map((slide) => (
+        <div
+          class="slider-area ptb--150 fullscreen d-flex align-items-center"
+          style={`background-image: url('${slide.url}')`}
+          role="img"
+          aria-label={slide.alt}
+        >
+          <div class="container">
+            <div class="row">
+              <div class="col-xl-5 offset-xl-7 col-lg-6 offset-lg-6">
+                <div class="slide-content">
+                  <h1>Vinyl railing and fencing for contractors</h1>
+                  <p>
+                    Family-owned in Lakewood, NJ since {site.founded}. We supply vinyl railing,
+                    fencing, posts, and structural products built for the jobsite.
+                  </p>
+                  <div class="shop-now-btn">
+                    <a class="is-primary" href={lanesHref("/products")}>
+                      View products <i class="fa fa-arrow-right"></i>
+                    </a>
+                    <a href={lanesHref("/contact")}>Contact us</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </div>
+
+  <div class="main-wrapper">
+    <div class="feature-product-area bg-color pt--90 pt_md--80 pt_sm--80 pb--100 pb_md--80 pb_sm--80" data-bg-color="#fff">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-title text-center">
+              <h2 class="title">Featured products</h2>
+            </div>
+          </div>
+        </div>
+        {
+          featured.length ? (
+            <div class="row mt--20">
+              {featured.map((product) => (
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt--30">
+                  <LanesProductCard product={product} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div class="lanes-empty">
+              <p>Product catalog coming next.</p>
+            </div>
+          )
+        }
+        <div class="text-center mt--50">
+          <div class="lanes-cta">
+            <a href={lanesHref("/products")}>All products</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</LanesLayout>

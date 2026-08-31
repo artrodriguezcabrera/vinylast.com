@@ -1,0 +1,24 @@
+---
+import { lanesBreadcrumbImage } from "../../lib/lanes";
+
+interface Props {
+  title: string;
+  intro?: string;
+  image?: string;
+}
+
+const { title, intro, image = lanesBreadcrumbImage } = Astro.props;
+---
+
+<div class="breadcumb-area ptb--100 ptb_md--100 ptb_sm--100" style={`background-image: url('${image}')`}>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="inner text-center">
+          <h2 class="font--40 mb--0">{title}</h2>
+          {intro && <p class="mt--20 mb--0">{intro}</p>}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

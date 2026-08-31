@@ -1,0 +1,98 @@
+---
+import LanesLayout from "../../layouts/LanesLayout.astro";
+import LanesPageHero from "../../components/lanes/LanesPageHero.astro";
+import { lanesHref } from "../../lib/lanes";
+import { site } from "../../lib/site";
+---
+
+<LanesLayout
+  title="Contact Us"
+  description={`Contact Vinylast Inc. at ${site.phone} or ${site.email}. ${site.address}.`}
+  currentPath={lanesHref("/contact")}
+>
+  <LanesPageHero title="Contact Us" intro="Call, email, or send a message. We work with contractors every day." />
+
+  <div class="main-wrapper">
+    <div class="contact-form ptb--130 ptb_md--80 ptb_sm--80 bg-color" data-bg-color="#ffffff">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8">
+            <div class="contact-form-wrapper">
+              <div class="section-title mb--30">
+                <h1 class="fontWeight400">Contact Vinylast</h1>
+                <p class="font--18">We will follow up at the email or phone you provide.</p>
+              </div>
+              <div class="lanes-alert" id="form-success" hidden role="status">
+                Thanks — your message was sent. We will follow up at the email or phone you provided.
+              </div>
+              <form
+                class="contact__form--1"
+                name="contact"
+                method="POST"
+                action={`${lanesHref("/contact")}?submitted=true`}
+                data-netlify="true"
+                netlify-honeypot="bot-field"
+              >
+                <input type="hidden" name="form-name" value="contact" />
+                <p class="visually-hidden" aria-hidden="true">
+                  <label>
+                    Don’t fill this out
+                    <input name="bot-field" />
+                  </label>
+                </p>
+                <div class="row">
+                  <div class="col-lg-12">
+                    <input name="name" type="text" placeholder="Name *" autocomplete="name" required />
+                  </div>
+                  <div class="col-lg-12 mt--20">
+                    <input name="company" type="text" placeholder="Company" autocomplete="organization" />
+                  </div>
+                  <div class="col-lg-6 mt--20">
+                    <input name="email" type="email" placeholder="Email *" autocomplete="email" required />
+                  </div>
+                  <div class="col-lg-6 mt--20">
+                    <input name="phone" type="tel" placeholder="Phone" autocomplete="tel" />
+                  </div>
+                  <div class="col-lg-12 mt--20">
+                    <textarea name="message" placeholder="Message *" required></textarea>
+                  </div>
+                  <div class="col-lg-12 mt--30">
+                    <input type="submit" value="Send Message" />
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="col-lg-4">
+            <div class="contact-container adress__style--1">
+              <ul class="contact-address">
+                <li>
+                  <span class="address-icon"><i class="fa fa-phone-square"></i></span>
+                  <span class="address-text"><a href={site.phoneHref}>{site.phone}</a></span>
+                </li>
+                <li>
+                  <span class="address-icon"><i class="fa fa-envelope"></i></span>
+                  <span class="address-text"><a href={`mailto:${site.email}`}>{site.email}</a></span>
+                </li>
+                <li>
+                  <span class="address-icon"><i class="fa fa-map-marker"></i></span>
+                  <span class="address-text"><a href={site.mapsUrl}>{site.address}</a></span>
+                </li>
+                <li>
+                  <span class="address-icon"><i class="fa fa-comments"></i></span>
+                  <span class="address-text">{site.spanish}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</LanesLayout>
+
+<script>
+  if (new URLSearchParams(window.location.search).get("submitted") === "true") {
+    document.getElementById("form-success")?.removeAttribute("hidden");
+  }
+</script>

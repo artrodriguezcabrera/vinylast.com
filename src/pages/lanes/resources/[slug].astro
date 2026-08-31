@@ -1,0 +1,90 @@
+---
+import LanesLayout from "../../../layouts/LanesLayout.astro";
+import LanesPageHero from "../../../components/lanes/LanesPageHero.astro";
+import { getResourceBySlug, getResources, youtubeEmbedUrl } from "../../../lib/contentful";
+import { lanesHref } from "../../../lib/lanes";
+import { resourceTypeLabels } from "../../../lib/types";
+
+export async function getStaticPaths() {
+  const resources = await getResources();
+  return resources.map((resource) => ({
+    params: { slug: resource.slug },
+    props: { slug: resource.slug },
+  }));
+}
+
+const { slug } = Astro.props;
+const resource = await getResourceBySlug(slug);
+
+if (!resource) {
+  return Astro.redirect(lanesHref("/resources"));
+}
+
+const embed = resource.videoUrl ? youtubeEmbedUrl(resource.videoUrl) : "";
+---
+
+<LanesLayout
+  title={resource.title}
+  description={resource.shortDescription || `${resource.title} from Vinylast Inc.`}
+  currentPath={lanesHref(`/resources/${resource.slug}`)}
+>
+  <LanesPageHero title={resource.title} image={resource.thumbnail?.url} />
+
+  <div class="main-wrapper">
+    <div class="shop-area bg-color ptb--120 ptb_md--80 ptb_sm--80" data-bg-color="#ffffff">
+      <div class="container">
+        <p class="bk_pra text-uppercase mb--10">{resourceTypeLabels[resource.type]}</p>
+        {resource.shortDescription && <p class="bk_pra">{resource.shortDescription}</p>}
+
+        <div class="lanes-cta mt--30 mb--40">
+          {
+            resource.file && (
+              <a href={resource.file.url} download>
+                Download PDF
+              </a>
+            )
+          }
+          <a class="is-outline" href={lanesHref("/contact")}>Questions? Contact us</a>
+        </div>
+
+        {
+          embed && (
+            <iframe
+              class="video-frame"
+              src={embed}
+              title={resource.title}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+            />
+          )
+        }
+
+        {
+          !embed && resource.thumbnail && (
+            <img
+              src={resource.thumbnail.url}
+              alt={resource.thumbnail.alt}
+              width={resource.thumbnail.width}
+              height={resource.thumbnail.height}
+              style="max-width: 42rem"
+            />
+          )
+        }
+
+        {
+          resource.relatedProducts.length > 0 && (
+            <p class="mt--40">
+              Related products:{" "}
+              {resource.relatedProducts.map((product, index) => (
+                <>
+                  {index > 0 && " · "}
+                  <a href={lanesHref(`/products/${product.slug}`)}>{product.name}</a>
+                </>
+              ))}
+            </p>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</LanesLayout>

@@ -1,0 +1,43 @@
+---
+import type { Product } from "../../lib/types";
+import { lanesHref } from "../../lib/lanes";
+
+interface Props {
+  product: Product;
+}
+
+const { product } = Astro.props;
+const href = lanesHref(`/products/${product.slug}`);
+---
+
+<div class="product">
+  <div class="inner">
+    <div class:list={["thumbnail", { "is-placeholder": !product.hero }]}>
+      <a href={href}>
+        {
+          product.hero ? (
+            <img
+              src={product.hero.url}
+              alt={product.hero.alt}
+              width={product.hero.width}
+              height={product.hero.height}
+            />
+          ) : (
+            <span>{product.category?.name || "Product"}</span>
+          )
+        }
+      </a>
+    </div>
+  </div>
+  <div class="content">
+    {
+      product.category && (
+        <span class="kicker">
+          {product.category.name}
+          {product.series ? ` · ${product.series}` : ""}
+        </span>
+      )
+    }
+    <h2><a href={href}>{product.name}</a></h2>
+  </div>
+</div>

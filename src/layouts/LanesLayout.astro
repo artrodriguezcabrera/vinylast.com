@@ -1,0 +1,44 @@
+---
+import { site } from "../lib/site";
+import LanesHeader from "../components/lanes/LanesHeader.astro";
+import LanesFooter from "../components/lanes/LanesFooter.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  currentPath: string;
+  transparentHeader?: boolean;
+}
+
+const { title, description = site.description, currentPath, transparentHeader = false } = Astro.props;
+const pageTitle = title === site.name ? title : `${title} — ${site.name}`;
+const isHome = transparentHeader;
+---
+
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <link rel="icon" href="/images/vinylast-logo.png" type="image/png" />
+    <link rel="canonical" href={new URL(Astro.url.pathname, site.url).href} />
+    <link rel="stylesheet" href="/lanes/assets/css/vendor/bootstrap.min.css" />
+    <link rel="stylesheet" href="/lanes/assets/css/plugins/plugins.css" />
+    <link rel="stylesheet" href="/lanes/assets/css/style.css" />
+    <link rel="stylesheet" href="/lanes/assets/css/vinylast-overrides.css" />
+  </head>
+  <body class:list={[{ "lanes-home": isHome }]}>
+    <LanesHeader currentPath={currentPath} transparent={transparentHeader} />
+    <main>
+      <slot />
+    </main>
+    <LanesFooter />
+    <script is:inline src="/lanes/assets/js/vendor/modernizr.min.js"></script>
+    <script is:inline src="/lanes/assets/js/vendor/jquery.js"></script>
+    <script is:inline src="/lanes/assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script is:inline src="/lanes/assets/js/plugins/plugins.js"></script>
+    <script is:inline src="/lanes/assets/js/vinylast.js"></script>
+  </body>
+</html>

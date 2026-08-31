@@ -1,0 +1,36 @@
+---
+import { resourceTypeLabels, type Resource } from "../../lib/types";
+import { lanesHref } from "../../lib/lanes";
+
+interface Props {
+  resource: Resource;
+}
+
+const { resource } = Astro.props;
+const href = lanesHref(`/resources/${resource.slug}`);
+---
+
+<div class="product">
+  <div class="inner">
+    <div class:list={["thumbnail", { "is-placeholder": !resource.thumbnail }]}>
+      <a href={href}>
+        {
+          resource.thumbnail ? (
+            <img
+              src={resource.thumbnail.url}
+              alt={resource.thumbnail.alt}
+              width={resource.thumbnail.width}
+              height={resource.thumbnail.height}
+            />
+          ) : (
+            <span>{resourceTypeLabels[resource.type]}</span>
+          )
+        }
+      </a>
+    </div>
+  </div>
+  <div class="content">
+    <span class="kicker">{resourceTypeLabels[resource.type]}</span>
+    <h2><a href={href}>{resource.title}</a></h2>
+  </div>
+</div>

@@ -1,0 +1,249 @@
+---
+import LanesLayout from "../../../layouts/LanesLayout.astro";
+import LanesPageHero from "../../../components/lanes/LanesPageHero.astro";
+import LanesProductCard from "../../../components/lanes/LanesProductCard.astro";
+import LanesResourceCard from "../../../components/lanes/LanesResourceCard.astro";
+import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../../lib/contentful";
+import { lanesHref } from "../../../lib/lanes";
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((product) => ({
+    params: { slug: product.slug },
+    props: { slug: product.slug },
+  }));
+}
+
+const { slug } = Astro.props;
+const product = await getProductBySlug(slug);
+
+if (!product) {
+  return Astro.redirect(lanesHref("/products"));
+}
+
+const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
+const allProducts = await getProducts();
+const related = allProducts
+  .filter((item) => item.slug !== product.slug && item.category?.slug === product.category?.slug)
+  .slice(0, 4);
+const relatedFallback =
+  related.length > 0
+    ? related
+    : allProducts.filter((item) => item.slug !== product.slug).slice(0, 4);
+---
+
+<LanesLayout
+  title={product.name}
+  description={product.shortDescription || `${product.name} from Vinylast Inc.`}
+  currentPath={lanesHref(`/products/${product.slug}`)}
+>
+  <LanesPageHero title={product.name} image={thumbs[0]?.url} />
+
+  <div class="main-wrapper">
+    <div class="brook-single-product plr--160 plr_lg--100 plr_md--50 plr_sm--50">
+      <div class="single-product-wrapper ptb--120">
+        <div class="row">
+          {
+            thumbs.length > 0 && (
+              <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <div class="single-product-left-side">
+                  <div class="product__details__container">
+                    <div class="tab_container big_img_container">
+                      {thumbs.map((image, index) => (
+                        <div
+                          class:list={["big_img", "tab-pane", "fade", { show: index === 0, active: index === 0 }]}
+                          id={`img${index + 1}`}
+                          role="tabpanel"
+                        >
+                          <img class="w-100" src={image.url} alt={image.alt} width={image.width} height={image.height} />
+                        </div>
+                      ))}
+                    </div>
+                    {thumbs.length > 1 && (
+                      <div class="sm_roduct_nav nav nav-tabs" role="tablist">
+                        {thumbs.map((image, index) => (
+                          <a
+                            class={index === 0 ? "active" : undefined}
+                            id={`img${index + 1}-tab`}
+                            data-bs-toggle="tab"
+                            href={`#img${index + 1}`}
+                            role="tab"
+                            aria-controls={`img${index + 1}`}
+                            aria-selected={index === 0 ? "true" : "false"}
+                          >
+                            <img src={image.url} alt="" width={image.width} height={image.height} />
+                          </a>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )
+          }
+          <div class:list={["col-lg-6", "col-md-6", "col-sm-12", "col-12", { "mt_sm--40": thumbs.length > 0 }]}>
+            <div class="single-product-details-side">
+              <div class="product-details">
+                <div class="inner">
+                  <div class="header">
+                    <h4 class="heading heading-h4">{product.name}</h4>
+                  </div>
+                  <div class="description">
+                    <p class="bk_pra">{product.shortDescription}</p>
+                  </div>
+                  {
+                    product.features.length > 0 && (
+                      <ul class="feature-list">
+                        {product.features.map((feature) => (
+                          <li>{feature}</li>
+                        ))}
+                      </ul>
+                    )
+                  }
+                  <div class="product-meta mt--30">
+                    {
+                      product.category && (
+                        <div class="meta-item">
+                          <h6 class="heading heading-h6">CATEGORY:</h6>
+                          <div class="item-list">
+                            <a href={`${lanesHref("/products")}?category=${product.category.slug}`}>
+                              {product.category.name}
+                            </a>
+                          </div>
+                        </div>
+                      )
+                    }
+                  </div>
+                  <div class="lanes-cta mt--30">
+                    <a href={lanesHref("/contact")}>Contact us about this product</a>
+                    {product.relatedResources[0]?.file && (
+                      <a class="is-outline" href={product.relatedResources[0].file.url}>
+                        Download spec
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="product_review pb--80 pb_md--80 pb_sm--60">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="description_nav nav nav-tabs d-block" role="tablist">
+              <a class="active" id="descrip-tab" data-bs-toggle="tab" href="#descrip" role="tab" aria-controls="descrip" aria-selected="true">
+                Description
+              </a>
+              {
+                product.specs.length > 0 && (
+                  <a id="specs-tab" data-bs-toggle="tab" href="#specs" role="tab" aria-controls="specs" aria-selected="false">
+                    Specs
+                  </a>
+                )
+              }
+            </div>
+          </div>
+        </div>
+        <div class="tab_container">
+          <div class="single_review_content tab-pane fade show active" id="descrip" role="tabpanel">
+            <div class="content">
+              {
+                product.bodyHtml ? (
+                  <Fragment set:html={product.bodyHtml} />
+                ) : (
+                  <p>{product.shortDescription}</p>
+                )
+              }
+            </div>
+          </div>
+          {
+            product.specs.length > 0 && (
+              <div class="single_review_content tab-pane fade" id="specs" role="tabpanel">
+                <div class="content">
+                  <table class="specs-table">
+                    <tbody>
+                      {product.specs.map((spec) => (
+                        <tr>
+                          <th scope="row">{spec.name}</th>
+                          <td>{spec.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )
+          }
+        </div>
+      </div>
+    </div>
+
+    {
+      product.videos.length > 0 && (
+        <div class="feature-product-area bg-color pb--80" data-bg-color="#fff">
+          <div class="container">
+            <div class="section-title text-center">
+              <h2 class="title">Installation videos</h2>
+            </div>
+            <div class="row mt--20">
+              {product.videos.map((video) => (
+                <div class="col-lg-6 mt--30">
+                  <iframe
+                    class="video-frame"
+                    src={youtubeEmbedUrl(video.url)}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen
+                  />
+                  <p class="mt--10">{video.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      product.relatedResources.length > 0 && (
+        <div class="feature-product-area bg-color pb--80" data-bg-color="#fff">
+          <div class="container">
+            <div class="section-title text-center">
+              <h2 class="title">Downloads &amp; resources</h2>
+            </div>
+            <div class="row mt--20">
+              {product.relatedResources.map((resource) => (
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt--30">
+                  <LanesResourceCard resource={resource} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+
+    {
+      relatedFallback.length > 0 && (
+        <div class="feature-product-area bg-color pb--120 pb_md--80 pb_sm--80" data-bg-color="#fff">
+          <div class="container">
+            <div class="section-title text-center">
+              <h2 class="title">Related products</h2>
+            </div>
+            <div class="row mt--20">
+              {relatedFallback.map((item) => (
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12 mt--30">
+                  <LanesProductCard product={item} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )
+    }
+  </div>
+</LanesLayout>

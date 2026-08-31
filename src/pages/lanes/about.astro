@@ -1,0 +1,96 @@
+---
+import LanesLayout from "../../layouts/LanesLayout.astro";
+import LanesPageHero from "../../components/lanes/LanesPageHero.astro";
+import { lanesHref } from "../../lib/lanes";
+import { site } from "../../lib/site";
+---
+
+<LanesLayout
+  title="About"
+  description="Vinylast Inc. is a family-owned vinyl railing and fencing supplier for contractors, based in Lakewood, NJ since 1974."
+  currentPath={lanesHref("/about")}
+>
+  <LanesPageHero title="About Us" intro="Family-owned. Contractor-focused. Since 1974." />
+
+  <div class="main-wrapper">
+    <div class="about-area ptb--120 ptb_md--80 ptb_sm--80 bg-white">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 col-md-12 col-12">
+            <div class="about-content pr--50 pr_md--0 pr_sm--0">
+              <h2 class="mb--0">Who we are</h2>
+              <div class="content mt--50 mt_sm--20 mt_md--20 mt_lg--20">
+                <p>
+                  Vinylast is a family-owned and operated business proudly supplying contractors
+                  with all their vinyl railing and fencing needs since 1974.
+                </p>
+                <p class="mt--30">
+                  We have been innovating, designing, and manufacturing products in the decking
+                  and railing industries for decades. We offer patented products including ADA
+                  handrail components and CCRR deck post mounts.
+                </p>
+                <p class="mt--30">
+                  Working with our customers, we supply not only products but solutions —
+                  designs that install easier, hold stronger, and above all, stay safer.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-12 col-12 mt_md--40 mt_sm--80">
+            <div class="thumbnail">
+              <img
+                src="/images/products/t-rail/vinyl-railing-with-t-rail-top-03.jpg"
+                alt="Vinylast vinyl railing installed on a porch"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-area pb--120 pb_md--80 pb_sm--80 bg-white">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="section-title--3 text-center">
+              <h3 class="title">HOW WE WORK</h3>
+            </div>
+          </div>
+        </div>
+        <div class="row mt--20">
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt--40">
+            <div class="service">
+              <h4 class="title">Job-built products</h4>
+              <p>
+                We design for installers: clear hardware, fewer steps, and details that survive
+                weather and inspection.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt--40">
+            <div class="service">
+              <h4 class="title">Tested to code</h4>
+              <p>
+                Vinylast works with accredited testing facilities so products meet current
+                building codes — not last year’s.
+              </p>
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12 mt--40">
+            <div class="service">
+              <h4 class="title">Direct from Lakewood</h4>
+              <p>
+                Headquarters at {site.address}. Call {site.phone} or email {site.email}. {site.spanish}.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="text-center mt--50">
+          <div class="lanes-cta">
+            <a href={lanesHref("/contact")}>Build with us</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</LanesLayout>

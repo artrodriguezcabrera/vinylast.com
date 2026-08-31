@@ -1,0 +1,89 @@
+---
+import LanesLayout from "../../../layouts/LanesLayout.astro";
+import LanesPageHero from "../../../components/lanes/LanesPageHero.astro";
+import LanesProductCard from "../../../components/lanes/LanesProductCard.astro";
+import { getCategories, getProducts } from "../../../lib/contentful";
+import { lanesHref } from "../../../lib/lanes";
+
+const products = await getProducts();
+const categories = await getCategories();
+---
+
+<LanesLayout
+  title="Products"
+  description="Vinyl railing, fencing, posts, and structural products from Vinylast Inc."
+  currentPath={lanesHref("/products")}
+>
+  <LanesPageHero title="Products" intro="Specs, photos, and downloads for the products we supply to contractors." />
+
+  <div class="main-wrapper">
+    <div class="shop-area bg-color ptb--120 ptb_md--80 ptb_sm--80" data-bg-color="#ffffff">
+      <div class="container">
+        {
+          products.length === 0 ? (
+            <div class="lanes-empty">
+              <h2>No products published yet</h2>
+              <p>When products are added they will show up here after the site rebuilds.</p>
+            </div>
+          ) : (
+            <>
+              {categories.length > 1 && (
+                <div class="lanes-filters" role="toolbar" aria-label="Filter products">
+                  <button type="button" data-filter="all" aria-pressed="true">
+                    All
+                  </button>
+                  {categories.map((category) => (
+                    <button type="button" data-filter={category.slug} aria-pressed="false">
+                      {category.name}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <div class="shop-minimal-product">
+                <div class="row row--25" id="product-grid">
+                  {products.map((product) => (
+                    <div
+                      class="col-lg-4 col-md-6 col-sm-6 col-12 col-xl-3 mt--60 lanes-product"
+                      data-category={product.category?.slug || "all"}
+                    >
+                      <LanesProductCard product={product} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )
+        }
+      </div>
+    </div>
+  </div>
+</LanesLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".lanes-filters button");
+  const cards = document.querySelectorAll<HTMLElement>("#product-grid .lanes-product");
+
+  function applyFilter(filter: string) {
+    const next = filter || "all";
+    buttons.forEach((item) => {
+      item.setAttribute("aria-pressed", item.dataset.filter === next ? "true" : "false");
+    });
+    cards.forEach((card) => {
+      const category = card.dataset.category || "all";
+      const show = next === "all" || category === next;
+      card.hidden = !show;
+    });
+
+    const url = new URL(window.location.href);
+    if (next === "all") url.searchParams.delete("category");
+    else url.searchParams.set("category", next);
+    history.replaceState({}, "", url);
+  }
+
+  const initial = new URLSearchParams(window.location.search).get("category") || "all";
+  applyFilter(initial);
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => applyFilter(button.dataset.filter || "all"));
+  });
+</script>

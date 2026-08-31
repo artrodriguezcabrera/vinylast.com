@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import ResourceCard from "../../components/ResourceCard.astro";
 import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../lib/contentful";
+import { resourceTypeLabels } from "../../lib/types";
 
 export async function getStaticPaths() {
   const products = await getProducts();
@@ -19,6 +20,48 @@ if (!product) {
 }
 
 const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
+const mockThumb = product.hero || thumbs[0];
+const usingMockResources = product.relatedResources.length === 0;
+const usingMockVideos = product.videos.length === 0;
+
+const resources = usingMockResources
+  ? [
+      {
+        id: "mock-install",
+        title: `${product.name} installation guide`,
+        slug: "sample-install",
+        type: "install" as const,
+        thumbnail: mockThumb,
+        shortDescription: "Sample install sheet for this product. Replace with the published PDF.",
+        relatedProducts: [],
+      },
+      {
+        id: "mock-spec",
+        title: `${product.name} spec sheet`,
+        slug: "sample-spec",
+        type: "spec" as const,
+        thumbnail: mockThumb,
+        shortDescription: "Sample dimensions, colors, and hardware list for quoting.",
+        relatedProducts: [],
+      },
+      {
+        id: "mock-warranty",
+        title: "Vinylast limited warranty",
+        slug: "sample-warranty",
+        type: "warranty" as const,
+        thumbnail: mockThumb,
+        shortDescription: "Sample warranty language for the demo. Not a live document.",
+        relatedProducts: [],
+      },
+    ]
+  : product.relatedResources;
+
+const videos = usingMockVideos
+  ? [
+      { title: `Installing ${product.name} — English (sample)`, url: mockThumb?.url || "" },
+      { title: `Instalación de ${product.name} — Español (sample)`, url: mockThumb?.url || "" },
+    ]
+  : product.videos;
 ---
 
 <Layout
@@ -104,75 +147,130 @@ const thumbs = product.gallery.length ? product.gallery : product.hero ? [produc
     </div>
   </section>
 
-  {
-    product.bodyHtml && (
-      <section class="section section-muted">
-        <div class="wrap prose">
-          <h2>Details</h2>
-          <Fragment set:html={product.bodyHtml} />
+  <section class="section">
+    <div class="wrap">
+      <div class="product-tabs">
+        <div class="product-tabs-nav" role="tablist" aria-label="Product details">
+          <button type="button" role="tab" id="tab-description" aria-controls="panel-description" aria-selected="true">
+            Description
+          </button>
+          <button type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="false">
+            Resources
+          </button>
+          <button type="button" role="tab" id="tab-videos" aria-controls="panel-videos" aria-selected="false">
+            Videos
+          </button>
         </div>
-      </section>
-    )
-  }
 
-  {
-    product.specs.length > 0 && (
-      <section class="section">
-        <div class="wrap">
-          <h2>Specifications</h2>
-          <table class="specs">
-            <tbody>
-              {product.specs.map((spec) => (
-                <tr>
-                  <th scope="row">{spec.name}</th>
-                  <td>{spec.value}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
-    )
-  }
-
-  {
-    product.videos.length > 0 && (
-      <section class="section section-muted">
-        <div class="wrap">
-          <h2>Installation videos</h2>
-          <div class="video-grid" style="margin-top: 1rem">
-            {product.videos.map((video) => (
-              <div>
-                <iframe
-                  class="video-frame"
-                  src={youtubeEmbedUrl(video.url)}
-                  title={video.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowfullscreen
-                />
-                <p style="margin-top: 0.5rem">{video.title}</p>
+        <div
+          class="product-tabs-panel"
+          role="tabpanel"
+          id="panel-description"
+          aria-labelledby="tab-description"
+        >
+          {
+            product.bodyHtml ? (
+              <div class="prose">
+                <Fragment set:html={product.bodyHtml} />
               </div>
-            ))}
-          </div>
+            ) : (
+              !product.specs.length && <p class="lede">{product.shortDescription}</p>
+            )
+          }
+          {
+            product.specs.length > 0 && (
+              <table class="specs">
+                <tbody>
+                  {product.specs.map((spec) => (
+                    <tr>
+                      <th scope="row">{spec.name}</th>
+                      <td>{spec.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )
+          }
         </div>
-      </section>
-    )
-  }
 
-  {
-    product.relatedResources.length > 0 && (
-      <section class="section">
-        <div class="wrap">
-          <h2>Downloads &amp; resources</h2>
-          <div class="cards" style="margin-top: 1.25rem">
-            {product.relatedResources.map((resource) => (
-              <ResourceCard resource={resource} />
-            ))}
+        <div
+          class="product-tabs-panel"
+          role="tabpanel"
+          id="panel-resources"
+          aria-labelledby="tab-resources"
+          hidden
+        >
+          {usingMockResources && <p class="lede">Sample downloads for this demo. Live PDFs will replace these.</p>}
+          <div class="cards">
+            {
+              usingMockResources
+                ? resources.map((resource) => (
+                    <a class="card" href="/contact">
+                      {resource.thumbnail && (
+                        <div class="card-media">
+                          <img
+                            src={resource.thumbnail.url}
+                            alt=""
+                            width={resource.thumbnail.width}
+                            height={resource.thumbnail.height}
+                          />
+                        </div>
+                      )}
+                      <div class="card-body">
+                        <p class="card-kicker">{resourceTypeLabels[resource.type]}</p>
+                        <h3>{resource.title}</h3>
+                        <p>{resource.shortDescription}</p>
+                        <span class="card-link">Sample resource</span>
+                      </div>
+                    </a>
+                  ))
+                : product.relatedResources.map((resource) => <ResourceCard resource={resource} />)
+            }
           </div>
         </div>
-      </section>
-    )
-  }
+
+        <div
+          class="product-tabs-panel"
+          role="tabpanel"
+          id="panel-videos"
+          aria-labelledby="tab-videos"
+          hidden
+        >
+          {usingMockVideos && <p class="lede">Sample videos for this demo. Published walkthroughs will replace these.</p>}
+          <div class="video-grid">
+            {
+              usingMockVideos
+                ? videos.map((video) => (
+                    <div>
+                      <div
+                        class="video-frame mock-video"
+                        style={video.url ? `background-image: url('${video.url}')` : undefined}
+                        role="img"
+                        aria-label={video.title}
+                      >
+                        <span class="mock-play" aria-hidden="true"></span>
+                      </div>
+                      <p style="margin-top: 0.5rem">{video.title}</p>
+                    </div>
+                  ))
+                : product.videos.map((video) => (
+                    <div>
+                      <iframe
+                        class="video-frame"
+                        src={youtubeEmbedUrl(video.url)}
+                        title={video.title}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen
+                      />
+                      <p style="margin-top: 0.5rem">{video.title}</p>
+                    </div>
+                  ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </Layout>
 
 <script>
@@ -186,5 +284,22 @@ const thumbs = product.gallery.length ? product.gallery : product.hero ? [produc
       buttons.forEach((item) => item.removeAttribute("aria-current"));
       button.setAttribute("aria-current", "true");
     });
+  });
+
+  const tabs = document.querySelectorAll<HTMLButtonElement>(".product-tabs-nav [role='tab']");
+  const panels = document.querySelectorAll<HTMLElement>(".product-tabs-panel");
+
+  function selectTab(next: HTMLButtonElement) {
+    tabs.forEach((tab) => {
+      const selected = tab === next;
+      tab.setAttribute("aria-selected", selected ? "true" : "false");
+    });
+    panels.forEach((panel) => {
+      panel.hidden = panel.id !== next.getAttribute("aria-controls");
+    });
+  }
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => selectTab(tab));
   });
 </script>
