@@ -46,7 +46,7 @@ const { currentPath } = Astro.props;
             <li>
               <a
                 href={item.href}
-                class={item.href === "/contact" ? "nav-cta" : undefined}
+                class={item.href === "/contact" ? "" : undefined}
                 aria-current={isCurrentPath(currentPath, item.href) ? "page" : undefined}
               >
                 {item.label}

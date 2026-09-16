@@ -6,25 +6,35 @@ import EmptyState from "../components/EmptyState.astro";
 import { getFeaturedProducts, getResources } from "../lib/contentful";
 import { site } from "../lib/site";
 
-const featured = await getFeaturedProducts();
+const featured = (await getFeaturedProducts()).filter(
+  (product) => product.category?.slug !== "accessories",
+);
 const resources = (await getResources()).slice(0, 3);
 
 const heroSlides = [
   {
     url: "/images/products/t-rail/vinyl-railing-with-t-rail-top-03.jpg",
     alt: "White vinyl T-Rail on a two-story porch",
+    title: "Enduring strength",
+    text: "For safety and peace of mind",
   },
   {
     url: "/images/products/keylargo/imperial-vinyl-yard-fence-5.jpg",
     alt: "Keylargo closed picket vinyl fence",
+    title: "Endless styles",
+    text: "Offers quality and value",
   },
   {
     url: "/images/products/ranch-rail/2-rail-post-rail-vinyl-fence-3.jpg",
     alt: "Ranch Rail post-and-rail vinyl fence",
+    title: "Lasting Beauty",
+    text: "Where performance meets style",
   },
   {
     url: "/images/products/pergola/1-4.jpg",
     alt: "Vinyl pergola over an outdoor living space",
+    title: "Make it yours",
+    text: "With custom designs and colors",
   },
 ];
 ---
@@ -49,11 +59,8 @@ const heroSlides = [
     <div class="hero-overlay"></div>
     <div class="wrap hero-copy">
       <p class="eyebrow">Since 1974 · Lakewood, NJ</p>
-      <h1>Vinyl railing and fencing for contractors</h1>
-      <p>
-        Family-owned and operated. We supply contractors with vinyl railing, fencing,
-        posts, and structural products — built to install cleanly and hold up on the job.
-      </p>
+      <h1 id="hero-title">{heroSlides[0].title}</h1>
+      <p id="hero-text">{heroSlides[0].text}</p>
       <div class="btn-row">
         <a class="btn btn-primary" href="/products">View products</a>
         <a class="btn btn-ghost" href="/contact">Contact us</a>
@@ -166,10 +173,12 @@ const heroSlides = [
   />
 </Layout>
 
-<script>
+<script define:vars={{ slideCopy: heroSlides.map((s) => ({ title: s.title, text: s.text })) }}>
   const INTERVAL_MS = 6000;
-  const track = document.querySelector<HTMLElement>("#hero-track");
-  const dots = [...document.querySelectorAll<HTMLButtonElement>(".hero-dot")];
+  const track = document.querySelector("#hero-track");
+  const titleEl = document.querySelector("#hero-title");
+  const textEl = document.querySelector("#hero-text");
+  const dots = [...document.querySelectorAll(".hero-dot")];
   const count = dots.length;
 
   if (track && count > 1 && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
@@ -177,18 +186,27 @@ const heroSlides = [
     let index = 0;
     let timer = 0;
 
-    function setDots(active: number) {
+    function setDots(active) {
       dots.forEach((dot, i) => {
         dot.setAttribute("aria-selected", i === active ? "true" : "false");
       });
     }
 
-    function goTo(next: number, animate = true) {
+    function setCopy(active) {
+      const slide = slideCopy[active];
+      if (!slide || !titleEl || !textEl) return;
+      titleEl.textContent = slide.title;
+      textEl.textContent = slide.text;
+    }
+
+    function goTo(next, animate = true) {
       index = next;
       slideTrack.style.transition = animate ? "transform 0.85s cubic-bezier(0.22, 1, 0.36, 1)" : "none";
       slideTrack.style.transform = `translateX(-${index * 100}%)`;
       if (!animate) void slideTrack.offsetWidth;
-      setDots(index % count);
+      const active = index % count;
+      setDots(active);
+      setCopy(active);
     }
 
     function advance() {
