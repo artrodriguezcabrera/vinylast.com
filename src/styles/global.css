@@ -747,6 +747,16 @@ a {
   color: var(--white);
 }
 
+.product-group + .product-group {
+  margin-top: 3rem;
+}
+
+.product-group h2 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.03em;
+  margin-bottom: 1.5rem;
+}
+
 /* Product detail */
 .crumb {
   display: flex;

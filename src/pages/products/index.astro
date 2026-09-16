@@ -6,6 +6,18 @@ import { getCategories, getProducts } from "../../lib/contentful";
 
 const products = await getProducts();
 const categories = await getCategories();
+const productGroups = [
+  ...categories.map((category) => ({
+    name: category.name,
+    slug: category.slug,
+    products: products.filter((product) => product.category?.slug === category.slug),
+  })),
+  {
+    name: "Other",
+    slug: "other",
+    products: products.filter((product) => !product.category),
+  },
+].filter((group) => group.products.length > 0);
 ---
 
 <Layout
@@ -27,7 +39,7 @@ const categories = await getCategories();
         products.length === 0 ? (
           <EmptyState
             title="No products published yet"
-            message="When products are added and published in Contentful, they will show up here after the site rebuilds."
+            message="When products are added and published in Contentful, they will show up here after the next site rebuilds."
           />
         ) : (
           <>
@@ -43,10 +55,19 @@ const categories = await getCategories();
                 ))}
               </div>
             )}
-            <div class="cards" id="product-grid">
-              {products.map((product) => (
-                <ProductCard product={product} />
-              ))}
+            <div id="product-grid">
+              {
+                productGroups.map((group) => (
+                  <section class="product-group" data-category={group.slug}>
+                    <h2>{group.name}</h2>
+                    <div class="cards">
+                      {group.products.map((product) => (
+                        <ProductCard product={product} />
+                      ))}
+                    </div>
+                  </section>
+                ))
+              }
             </div>
           </>
         )
@@ -57,18 +78,16 @@ const categories = await getCategories();
 
 <script>
   const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
-  const cards = document.querySelectorAll<HTMLElement>("#product-grid .card");
+  const groups = document.querySelectorAll<HTMLElement>(".product-group");
 
   function applyFilter(filter: string) {
     const next = filter || "all";
     buttons.forEach((item) => {
       item.setAttribute("aria-pressed", item.dataset.filter === next ? "true" : "false");
     });
-    cards.forEach((card) => {
-      const category = card.dataset.category || "all";
-      const show = next === "all" || category === next;
-      card.classList.toggle("is-filtered-out", !show);
-      card.hidden = !show;
+    groups.forEach((group) => {
+      const category = group.dataset.category || "all";
+      group.hidden = !(next === "all" || category === next);
     });
 
     const url = new URL(window.location.href);
