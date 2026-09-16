@@ -15,8 +15,8 @@
   --font: "DM Sans", system-ui, sans-serif;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --shadow: 0 10px 30px rgba(16, 42, 61, 0.08);
-  --header-h: 4.25rem;
-  --util-h: 2.5rem;
+  --header-h: 3.5rem;
+  --util-h: 3.5rem;
   --max: 72rem;
 }
 
@@ -89,24 +89,25 @@ a {
 .util {
   background: var(--charcoal);
   color: var(--white);
-  font-size: 0.8125rem;
+  font-size: 14px;
   font-weight: 500;
 }
 
 .util-inner {
+  position: relative;
   min-height: var(--util-h);
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   gap: 0.75rem;
-  flex-wrap: wrap;
-  padding-block: 0.35rem;
+  padding-block: 0.45rem;
 }
 
 .util-links {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem 1.25rem;
+  justify-self: start;
 }
 
 .util a {
@@ -129,6 +130,7 @@ a {
 }
 
 .util-es {
+  justify-self: end;
   letter-spacing: 0.02em;
   opacity: 0.9;
 }
@@ -150,19 +152,24 @@ a {
   min-height: var(--header-h);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
 }
 
 .logo-link {
   display: flex;
+  grid-column: 2;
   align-items: center;
+  justify-self: center;
   text-decoration: none;
 }
 
 .logo-link img {
   height: 2.6rem;
   width: auto;
+}
+
+.nav {
+  flex: 1;
+  width: 100%;
 }
 
 .nav-toggle {
@@ -186,15 +193,17 @@ a {
 .nav-list {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
   gap: 0.15rem;
   list-style: none;
 }
 
 .nav-list a {
   display: inline-block;
-  padding: 0.55rem 0.8rem;
+  padding: 18px 0.8rem;
   text-decoration: none;
-  font-size: 0.8125rem;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -215,7 +224,7 @@ a {
 .nav-list a.nav-cta {
   background: var(--brand-blue);
   color: var(--white);
-  margin-left: 0.35rem;
+  padding: 0.55rem 0.8rem;
 }
 
 .nav-list a.nav-cta:hover,
@@ -292,7 +301,7 @@ a {
 /* Heroes */
 .hero {
   position: relative;
-  min-height: min(78vh, 40rem);
+  min-height: min(78vh, 36rem);
   display: grid;
   align-items: center;
   overflow: hidden;
@@ -413,7 +422,7 @@ a {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1rem;
-  padding-block: 1.35rem;
+  padding-block: 1.1rem;
 }
 
 .trust-item {
@@ -1030,6 +1039,21 @@ a {
 
   .nav-toggle {
     display: inline-block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    z-index: 1;
+    transform: translateY(-50%);
+    border-color: rgba(255, 255, 255, 0.28);
+    background: transparent;
+  }
+
+  .nav-toggle span {
+    background: var(--white);
+  }
+
+  .header-inner {
+    min-height: 0;
   }
 
   .nav {
@@ -1049,16 +1073,23 @@ a {
   .nav-list {
     flex-direction: column;
     align-items: stretch;
+    justify-content: flex-start;
     padding: 0.5rem 1rem 1rem;
   }
 
   .nav-list a.nav-cta {
-    margin-left: 0;
     text-align: center;
   }
 
-  .util-bar {
+  .util-bar .util-links,
+  .util-bar .util-es {
     display: none;
+  }
+
+  .util-bar .util-inner {
+    display: flex;
+    justify-content: center;
+    padding-inline: 3.5rem;
   }
 
   .nav-util {
@@ -1067,6 +1098,7 @@ a {
   }
 
   .nav-util .util-inner {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     min-height: 0;
