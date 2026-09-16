@@ -1,9 +1,9 @@
 export const site = {
   name: "Vinylast Inc.",
   shortName: "Vinylast",
-  tagline: "Vinyl railing and fencing for contractors since 1974.",
+  tagline: "Vinyl railing and fencing for customers since 1974.",
   description:
-    "Vinylast is a family-owned and operated business proudly supplying contractors with all their vinyl railing and fencing needs since 1974.",
+    "Vinylast is a family-owned and operated business proudly supplying customers with all their vinyl railing and fencing needs since 1974.",
   email: "customerservice@vinylast.com",
   phone: "(732) 367-7200",
   phoneHref: "tel:+17323677200",
@@ -18,6 +18,7 @@ export const site = {
 export const nav = [
   { href: "/products", label: "Products" },
   { href: "/resources", label: "Resources" },
+  { href: "/#", label: "Sourcing & Design" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact Us" },
 ] as const;

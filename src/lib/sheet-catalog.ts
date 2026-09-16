@@ -398,7 +398,7 @@ export const sheetProducts: Product[] = [
     series: "Vinyl",
     shortDescription:
       "Vinylast has distributed the full Harvey window and door line for more than 30 years — new construction and replacement, built for Northeast weather.",
-    extraHtml: `<p>Since 1961 Harvey has helped contractors and builders deliver for homeowners. Products are built for tough northern winters and hot summers. For the full line, see <a href="https://harveywindows.com/">harveywindows.com</a>.</p>`,
+    extraHtml: `<p>Since 1961 Harvey has helped customers and builders deliver for homeowners. Products are built for tough northern winters and hot summers. For the full line, see <a href="https://harveywindows.com/">harveywindows.com</a>.</p>`,
     features: [
       "Full line of new-construction and replacement windows and doors",
       "Many styles and colors",
