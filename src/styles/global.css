@@ -475,6 +475,10 @@ a {
   gap: 1.25rem;
 }
 
+.cards:has(.card-product) {
+  gap: 2.75rem 1.5rem;
+}
+
 .card {
   background: var(--white);
   border: 1px solid var(--border);
@@ -498,6 +502,7 @@ a {
 }
 
 .card-media {
+  position: relative;
   aspect-ratio: 4 / 3;
   background: var(--brand-blue-soft);
   overflow: hidden;
@@ -552,6 +557,107 @@ a {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--brand-blue-deep);
+}
+
+.card-product {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  box-shadow: none;
+}
+
+.card-product:hover {
+  transform: none;
+}
+
+.card-product .card-media {
+  aspect-ratio: 13 / 10;
+}
+
+.card-product .card-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: transparent;
+  border: 2px solid transparent;
+  transition: 0.4s;
+}
+
+.card-product:hover .card-media::before {
+  background: rgba(0, 0, 0, 0.5);
+  border-color: var(--brand-blue);
+}
+
+.card-product .card-body {
+  position: relative;
+  width: calc(100% - 2.5rem);
+  margin-inline: auto;
+  min-height: 4.75rem;
+  padding: 0;
+  display: block;
+}
+
+.card-panel {
+  position: absolute;
+  top: -2.9rem;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--white);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  padding: 1.75rem 1.25rem 2.15rem;
+  text-align: center;
+}
+
+.card-product .card-body h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0;
+  margin-bottom: 0.35rem;
+}
+
+.card-product .card-link {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.94rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--brand-blue);
+  transition: color 0.2s var(--ease-out);
+}
+
+.card-product:hover .card-link,
+.card-product:hover .card-body h3 {
+  color: var(--brand-blue);
+}
+
+.card-chevrons {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.45rem;
+}
+
+.card-chevrons span {
+  display: block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid currentColor;
+  border-top: 2px solid currentColor;
+  transform: rotate(45deg);
+  margin-left: -0.12rem;
+  transition: transform 0.3s var(--ease-out);
+}
+
+.card-product:hover .card-chevrons span {
+  transform: rotate(45deg) translateX(2px) translateY(-2px);
 }
 
 .promo-grid {
@@ -1143,6 +1249,11 @@ a {
 
   .card:hover {
     transform: none;
+  }
+
+  .card-product:hover .card-media::before,
+  .card-product:hover .card-chevrons span {
+    transition: none;
   }
 
   .hero-track {

@@ -1,14 +1,23 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ProductCard from "../components/ProductCard.astro";
+import CategoryCard from "../components/CategoryCard.astro";
 import CtaBand from "../components/CtaBand.astro";
-import EmptyState from "../components/EmptyState.astro";
-import { getFeaturedProducts, getResources } from "../lib/contentful";
+import { getProducts, getResources } from "../lib/contentful";
 import { site } from "../lib/site";
 
-const featured = (await getFeaturedProducts()).filter(
-  (product) => product.category?.slug !== "accessories",
-);
+const homeCategorySlugs = ["railing", "vinyl-fencing", "pergolas"] as const;
+const products = await getProducts();
+const categoryCards = homeCategorySlugs.flatMap((slug) => {
+  const product = products.find((item) => item.category?.slug === slug);
+  if (!product?.category) return [];
+  return [
+    {
+      name: product.category.name,
+      slug: product.category.slug,
+      image: product.hero,
+    },
+  ];
+});
 const resources = (await getResources()).slice(0, 3);
 
 const heroSlides = [
@@ -104,6 +113,7 @@ const heroSlides = [
 
   <section class="section">
     <div class="wrap">
+      <!--
       <div class="section-head">
         <div>
           <h2>Products</h2>
@@ -111,20 +121,14 @@ const heroSlides = [
         </div>
         <a class="btn btn-outline" href="/products">All products</a>
       </div>
-      {
-        featured.length ? (
-          <div class="cards">
-            {featured.map((product) => (
-              <ProductCard product={product} />
-            ))}
-          </div>
-        ) : (
-          <EmptyState
-            title="Product catalog coming next"
-            message="Add products in Contentful and they will appear here after the next site build."
-          />
-        )
-      }
+      -->
+      <div class="cards">
+        {
+          categoryCards.map((category) => (
+            <CategoryCard name={category.name} slug={category.slug} image={category.image} />
+          ))
+        }
+      </div>
     </div>
   </section>
 

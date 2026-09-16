@@ -1,0 +1,35 @@
+---
+import type { AssetImage } from "../lib/types";
+
+interface Props {
+  name: string;
+  slug: string;
+  image?: AssetImage;
+}
+
+const { name, slug, image } = Astro.props;
+---
+
+<a class="card card-product" href={`/products?category=${slug}`}>
+  <div class:list={["card-media", { "is-placeholder": !image }]}>
+    {
+      image ? (
+        <img src={image.url} alt={image.alt} width={image.width} height={image.height} />
+      ) : (
+        <span>{name}</span>
+      )
+    }
+  </div>
+  <div class="card-body">
+    <div class="card-panel">
+      <h3>{name}</h3>
+      <span class="card-link">
+        View products
+        <span class="card-chevrons" aria-hidden="true">
+          <span></span>
+          <span></span>
+        </span>
+      </span>
+    </div>
+  </div>
+</a>
