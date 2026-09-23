@@ -471,7 +471,7 @@ a {
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 1.25rem;
 }
 
@@ -616,7 +616,7 @@ a {
 }
 
 .card-product .card-body h3 {
-  font-size: 1.25rem;
+  font-size: 17px;
   font-weight: 700;
   line-height: 1.4;
   letter-spacing: 0;

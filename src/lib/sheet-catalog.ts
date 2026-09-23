@@ -1,17 +1,30 @@
 import { productGalleries } from "./product-images";
 import type { Category, Product, Spec } from "./types";
 
-export const catRailing: Category = { id: "cat-railing", name: "Railing", slug: "railing" };
+export const catVinylRailing: Category = {
+  id: "cat-vinyl-railing",
+  name: "Vinyl Railing",
+  slug: "vinyl-railing",
+};
+export const catAluminumRailing: Category = {
+  id: "cat-aluminum-railing",
+  name: "Aluminum Railing",
+  slug: "aluminum-railing",
+};
 export const catFencing: Category = {
   id: "cat-fencing",
-  name: "Vinyl fencing",
+  name: "Vinyl Fencing",
   slug: "vinyl-fencing",
 };
-export const catPergola: Category = { id: "cat-pergola", name: "Pergolas", slug: "pergolas" };
-export const catShower: Category = {
-  id: "cat-shower",
-  name: "Shower enclosures",
-  slug: "shower-enclosures",
+export const catAluminumFencing: Category = {
+  id: "cat-aluminum-fencing",
+  name: "Aluminum Fencing",
+  slug: "aluminum-fencing",
+};
+export const catPergolaShower: Category = {
+  id: "cat-pergola-shower",
+  name: "Pergola & Shower Enclosure",
+  slug: "pergola-and-shower-enclosure",
 };
 export const catAccessories: Category = {
   id: "cat-accessories",
@@ -20,15 +33,16 @@ export const catAccessories: Category = {
 };
 export const catWindows: Category = {
   id: "cat-windows",
-  name: "Windows and doors",
+  name: "Windows & Doors",
   slug: "windows-and-doors",
 };
 
 export const sheetCategories: Category[] = [
-  catRailing,
+  catVinylRailing,
+  catAluminumRailing,
   catFencing,
-  catPergola,
-  catShower,
+  catAluminumFencing,
+  catPergolaShower,
   catAccessories,
   catWindows,
 ];
@@ -71,7 +85,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "t-rail",
     name: "T-Rail",
-    category: catRailing,
+    category: catVinylRailing,
     series: "Vinyl",
     featured: true,
     shortDescription:
@@ -93,7 +107,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "palisade",
     name: "Palisade",
-    category: catRailing,
+    category: catVinylRailing,
     series: "Vinyl",
     shortDescription:
       "Contoured-top vinyl railing that blends contemporary and classic looks, with infill options for almost any design.",
@@ -114,7 +128,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "2-box",
     name: "2-Box",
-    category: catRailing,
+    category: catVinylRailing,
     series: "Vinyl",
     shortDescription:
       "Smooth, modern vinyl railing — budget-friendly, with enough customization to finish an outdoor space cleanly.",
@@ -135,7 +149,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "3000-series",
     name: "3000 Series",
-    category: catRailing,
+    category: catVinylRailing,
     series: "Vinyl",
     shortDescription:
       "Contemporary vinyl railing for medium to large areas — 10 infill choices and 4 colors. Superior special order.",
@@ -155,7 +169,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "5000-series",
     name: "5000 Series",
-    category: catRailing,
+    category: catVinylRailing,
     series: "Vinyl",
     shortDescription:
       "Substantial vinyl railing for estates, country clubs, and large commercial properties. Superior special order.",
@@ -264,7 +278,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "pergola",
     name: "Pergola",
-    category: catPergola,
+    category: catPergolaShower,
     series: "Vinyl",
     featured: true,
     shortDescription:
@@ -281,7 +295,7 @@ export const sheetProducts: Product[] = [
   product({
     slug: "outdoor-shower-enclosure",
     name: "Outdoor shower enclosure",
-    category: catShower,
+    category: catPergolaShower,
     series: "Vinyl",
     shortDescription:
       "Custom vinyl outdoor shower enclosures for pools, beach houses, and rinse-off at the back door — sized and roofed to the job.",

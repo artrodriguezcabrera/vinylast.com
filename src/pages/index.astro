@@ -5,7 +5,13 @@ import CtaBand from "../components/CtaBand.astro";
 import { getProducts, getResources } from "../lib/contentful";
 import { site } from "../lib/site";
 
-const homeCategorySlugs = ["railing", "vinyl-fencing", "pergolas"] as const;
+const homeCategorySlugs = [
+  "vinyl-railing",
+  "vinyl-fencing",
+  "pergola-and-shower-enclosure",
+  "accessories",
+  "windows-and-doors",
+] as const;
 const products = await getProducts();
 const categoryCards = homeCategorySlugs.flatMap((slug) => {
   const product = products.find((item) => item.category?.slug === slug);
