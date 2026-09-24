@@ -1,18 +1,11 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ResourceCard from "../../components/ResourceCard.astro";
-import EmptyState from "../../components/EmptyState.astro";
-import { getResources } from "../../lib/contentful";
-import { resourceTypeLabels, resourceTypeOrder, type ResourceType } from "../../lib/types";
+import { resourceCategories, resourceDocuments, resourceThumbnail } from "../../lib/resource-documents";
 
-const resources = await getResources();
-const groups = resourceTypeOrder
-  .map((type) => ({
-    type,
-    label: resourceTypeLabels[type as ResourceType],
-    items: resources.filter((resource) => resource.type === type),
-  }))
-  .filter((group) => group.items.length > 0);
+const groups = resourceCategories.map((category) => ({
+  ...category,
+  documents: resourceDocuments.filter((document) => document.category === category.slug),
+}));
 ---
 
 <Layout
@@ -29,28 +22,81 @@ const groups = resourceTypeOrder
   </section>
 
   <section class="section">
-    <div class="wrap resource-groups">
-      {
-        resources.length === 0 ? (
-          <EmptyState
-            title="No resources published yet"
-            message="PDFs and videos added in Contentful will appear here after the next site build."
-          />
-        ) : (
+    <div class="wrap">
+      <div class="filters" role="toolbar" aria-label="Filter resources">
+        <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">
+          All
+        </button>
+        {
+          resourceCategories.map((category) => (
+            <button class="filter-btn" type="button" data-filter={category.slug} aria-pressed="false">
+              {category.name}
+            </button>
+          ))
+        }
+      </div>
+      <div id="resource-grid">
+        {
           groups.map((group) => (
-            <section>
-              <div class="section-head">
-                <h2>{group.label}</h2>
-              </div>
-              <div class="cards">
-                {group.items.map((resource) => (
-                  <ResourceCard resource={resource} />
-                ))}
-              </div>
+            <section class="product-group" data-category={group.slug}>
+              <h2>{group.name}</h2>
+              {group.documents.length === 0 ? (
+                <p class="lede">No documents in this category yet.</p>
+              ) : (
+                <div class="cards">
+                  {group.documents.map((document) => (
+                    <a class="card" href={document.file} target="_blank" rel="noopener noreferrer">
+                      <div class="card-media is-document">
+                        <img src={resourceThumbnail(document.file)} alt="" />
+                      </div>
+                      <div class="card-body">
+                        <h3>{document.title}</h3>
+                        <span class="card-link card-action">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                            <path d="M12 3v12"></path>
+                            <path d="m7 11 5 5 5-5"></path>
+                            <path d="M5 21h14"></path>
+                          </svg>
+                          Download PDF
+                          <span class="visually-hidden"> (opens in a new tab)</span>
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
             </section>
           ))
-        )
-      }
+        }
+      </div>
     </div>
   </section>
 </Layout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  const groups = document.querySelectorAll<HTMLElement>(".product-group");
+
+  function applyFilter(filter: string) {
+    const next = filter || "all";
+    buttons.forEach((item) => {
+      item.setAttribute("aria-pressed", item.dataset.filter === next ? "true" : "false");
+    });
+    groups.forEach((group) => {
+      const category = group.dataset.category || "all";
+      group.hidden = !(next === "all" || category === next);
+    });
+
+    const url = new URL(window.location.href);
+    if (next === "all") url.searchParams.delete("category");
+    else url.searchParams.set("category", next);
+    history.replaceState({}, "", url);
+  }
+
+  const initial = new URLSearchParams(window.location.search).get("category") || "all";
+  applyFilter(initial);
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => applyFilter(button.dataset.filter || "all"));
+  });
+</script>

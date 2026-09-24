@@ -514,6 +514,10 @@ a {
   object-fit: cover;
 }
 
+.card-media.is-document img {
+  object-fit: contain;
+}
+
 .card-media.is-placeholder {
   display: grid;
   place-items: center;
@@ -557,6 +561,23 @@ a {
   letter-spacing: 0.06em;
   text-transform: uppercase;
   color: var(--brand-blue-deep);
+}
+
+.card-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.card-action svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  flex-shrink: 0;
+}
+
+.card:hover .card-action {
+  color: var(--brand-blue);
 }
 
 .card-product {
