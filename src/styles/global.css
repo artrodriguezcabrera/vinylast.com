@@ -772,10 +772,15 @@ a {
   margin-top: 3rem;
 }
 
-.product-group h2 {
+.product-group h2,
+.testing-reports h2 {
   font-size: clamp(1.5rem, 3vw, 2rem);
   letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
+}
+
+.testing-reports {
+  margin-top: 3rem;
 }
 
 /* Product detail */
@@ -940,7 +945,8 @@ a {
 }
 
 .feature-list,
-.prose ul {
+.prose ul,
+.prose ol {
   padding-left: 1.15rem;
   display: grid;
   gap: 0.4rem;
@@ -959,6 +965,9 @@ a {
 
 .prose p + p,
 .prose p + ul,
+.prose p + ol,
+.prose ul + p,
+.prose ol + p,
 .prose h2 {
   margin-top: 1rem;
 }

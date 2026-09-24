@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { resourceCategories, resourceDocuments, resourceThumbnail } from "../../lib/resource-documents";
+import { site } from "../../lib/site";
 
 const groups = resourceCategories.map((category) => ({
   ...category,
@@ -34,6 +35,9 @@ const groups = resourceCategories.map((category) => ({
             </button>
           ))
         }
+        <button class="filter-btn" type="button" data-filter="testing-reports" aria-pressed="false">
+          Testing Reports
+        </button>
       </div>
       <div id="resource-grid">
         {
@@ -69,13 +73,34 @@ const groups = resourceCategories.map((category) => ({
           ))
         }
       </div>
+      <section class="testing-reports" data-category="testing-reports" aria-labelledby="testing-reports-heading">
+        <h2 id="testing-reports-heading">Testing Reports</h2>
+        <div class="prose">
+          <p>
+            Some building departments may require testing reports or compliance letters for different products and
+            applications. All Vinylast Inc. products are third-party tested through Intertek. Please submit the
+            following information, and we will get you the reports you need.
+          </p>
+          <ol>
+            <li>Product name</li>
+            <li>Application (residential or commercial), and whether IRC or IBC codes apply</li>
+            <li>State and county of installation</li>
+            <li>Information about the specific type of installation for the product</li>
+          </ol>
+          <p>
+            Please submit this information and any questions to <a href={`mailto:${site.email}`}>{site.email}</a>.
+            Upon receipt, we will review your request and reply with the corresponding answers, testing reports, and
+            installation recommendations for your application.
+          </p>
+        </div>
+      </section>
     </div>
   </section>
 </Layout>
 
 <script>
   const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
-  const groups = document.querySelectorAll<HTMLElement>(".product-group");
+  const groups = document.querySelectorAll<HTMLElement>(".product-group, .testing-reports");
 
   function applyFilter(filter: string) {
     const next = filter || "all";
