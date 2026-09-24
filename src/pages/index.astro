@@ -2,10 +2,16 @@
 import Layout from "../layouts/Layout.astro";
 import CategoryCard from "../components/CategoryCard.astro";
 import CtaBand from "../components/CtaBand.astro";
-import { getProducts, getResources } from "../lib/contentful";
+import { getProducts } from "../lib/contentful";
 import { site } from "../lib/site";
 
-const homeCategorySlugs = ["railing", "vinyl-fencing", "pergolas"] as const;
+const homeCategorySlugs = [
+  "vinyl-railing",
+  "vinyl-fencing",
+  "pergola-and-shower-enclosure",
+  "accessories",
+  "windows-and-doors",
+] as const;
 const products = await getProducts();
 const categoryCards = homeCategorySlugs.flatMap((slug) => {
   const product = products.find((item) => item.category?.slug === slug);
@@ -18,19 +24,17 @@ const categoryCards = homeCategorySlugs.flatMap((slug) => {
     },
   ];
 });
-const resources = (await getResources()).slice(0, 3);
-
 const heroSlides = [
   {
     url: "/images/products/t-rail/vinyl-railing-with-t-rail-top-03.jpg",
     alt: "White vinyl T-Rail on a two-story porch",
-    title: "Enduring strength",
+    title: "Enduring Strength",
     text: "For safety and peace of mind",
   },
   {
     url: "/images/products/keylargo/imperial-vinyl-yard-fence-5.jpg",
     alt: "Keylargo closed picket vinyl fence",
-    title: "Endless styles",
+    title: "Endless Styles",
     text: "Offers quality and value",
   },
   {
@@ -42,7 +46,7 @@ const heroSlides = [
   {
     url: "/images/products/pergola/1-4.jpg",
     alt: "Vinyl pergola over an outdoor living space",
-    title: "Make it yours",
+    title: "Make It Yours",
     text: "With custom designs and colors",
   },
 ];
@@ -132,48 +136,11 @@ const heroSlides = [
     </div>
   </section>
 
-  <section class="section section-muted">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <h2>Resources</h2>
-          <p>Installation guides, spec sheets, and videos. Download what you need and get back to work.</p>
-        </div>
-        <a class="btn btn-outline" href="/resources">All resources</a>
-      </div>
-      <div class="promo-grid">
-        <a class="promo" href="/resources" style="background-image: url('/images/cta-docs.jpg')">
-          <div>
-            <h3>Downloads</h3>
-            <p>Install sheets, reports, and catalogs.</p>
-          </div>
-        </a>
-        <a class="promo" href="/resources" style="background-image: url('/images/cta-videos.jpg')">
-          <div>
-            <h3>Installation videos</h3>
-            <p>English and Spanish walkthroughs.</p>
-          </div>
-        </a>
-        <a class="promo" href="/contact" style="background-image: url('/images/cta-contact.jpg')">
-          <div>
-            <h3>Talk to Vinylast</h3>
-            <p>Call, email, or send a message.</p>
-          </div>
-        </a>
-      </div>
-      {
-        resources.length > 0 && (
-          <p class="lede" style="margin-top: 1.5rem">
-            Latest files: {resources.map((r) => r.title).join(" · ")}
-          </p>
-        )
-      }
-    </div>
-  </section>
-
   <CtaBand
-    title="Need a product or a spec sheet?"
-    text={`Call ${site.phone} or send a note. We work with customers every day.`}
+    title="Resources"
+    text={`Installation guides, spec sheets, and warranties. Download what you need and get back to work.`}
+    href="/resources"
+    cta="View Resources"
   />
 </Layout>
 

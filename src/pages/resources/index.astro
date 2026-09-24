@@ -1,56 +1,127 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import ResourceCard from "../../components/ResourceCard.astro";
-import EmptyState from "../../components/EmptyState.astro";
-import { getResources } from "../../lib/contentful";
-import { resourceTypeLabels, resourceTypeOrder, type ResourceType } from "../../lib/types";
+import { resourceCategories, resourceDocuments, resourceThumbnail } from "../../lib/resource-documents";
+import { site } from "../../lib/site";
 
-const resources = await getResources();
-const groups = resourceTypeOrder
-  .map((type) => ({
-    type,
-    label: resourceTypeLabels[type as ResourceType],
-    items: resources.filter((resource) => resource.type === type),
-  }))
-  .filter((group) => group.items.length > 0);
+const groups = resourceCategories.map((category) => ({
+  ...category,
+  documents: resourceDocuments.filter((document) => document.category === category.slug),
+}));
 ---
 
 <Layout
   title="Resources"
-  description="Download Vinylast installation guides, spec sheets, warranties, catalogs, and videos."
+  description="Catalogs, installation guides, warranties, and maintenance documents from Vinylast Inc."
   currentPath="/resources"
 >
   <section class="page-hero">
     <div class="wrap">
       <p class="eyebrow">Downloads</p>
       <h1>Resources</h1>
-      <p>Installation documents, test reports, catalogs, and videos — grouped so you can find the file fast.</p>
+      <p>Catalogs, installation guides, warranties, and maintenance documents.</p>
     </div>
   </section>
 
   <section class="section">
-    <div class="wrap resource-groups">
-      {
-        resources.length === 0 ? (
-          <EmptyState
-            title="No resources published yet"
-            message="PDFs and videos added in Contentful will appear here after the next site build."
-          />
-        ) : (
+    <div class="wrap">
+      <div class="filters" role="toolbar" aria-label="Filter resources">
+        <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">
+          All
+        </button>
+        {
+          resourceCategories.map((category) => (
+            <button class="filter-btn" type="button" data-filter={category.slug} aria-pressed="false">
+              {category.name}
+            </button>
+          ))
+        }
+        <button class="filter-btn" type="button" data-filter="testing-reports" aria-pressed="false">
+          Testing Reports
+        </button>
+      </div>
+      <div id="resource-grid">
+        {
           groups.map((group) => (
-            <section>
-              <div class="section-head">
-                <h2>{group.label}</h2>
-              </div>
-              <div class="cards">
-                {group.items.map((resource) => (
-                  <ResourceCard resource={resource} />
-                ))}
-              </div>
+            <section class="product-group" data-category={group.slug}>
+              <h2>{group.name}</h2>
+              {group.documents.length === 0 ? (
+                <p class="lede">No documents in this category yet.</p>
+              ) : (
+                <div class="cards">
+                  {group.documents.map((document) => (
+                    <a class="card" href={document.file} target="_blank" rel="noopener noreferrer">
+                      <div class="card-media is-document">
+                        <img src={resourceThumbnail(document.file)} alt="" />
+                      </div>
+                      <div class="card-body">
+                        <h3>{document.title}</h3>
+                        <span class="card-link card-action">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                            <path d="M12 3v12"></path>
+                            <path d="m7 11 5 5 5-5"></path>
+                            <path d="M5 21h14"></path>
+                          </svg>
+                          Download PDF
+                          <span class="visually-hidden"> (opens in a new tab)</span>
+                        </span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              )}
             </section>
           ))
-        )
-      }
+        }
+      </div>
+      <section class="testing-reports" data-category="testing-reports" aria-labelledby="testing-reports-heading">
+        <h2 id="testing-reports-heading">Testing Reports</h2>
+        <div class="prose">
+          <p>
+            Some building departments may require testing reports or compliance letters for different products and
+            applications. All Vinylast Inc. products are third-party tested through Intertek. Please submit the
+            following information, and we will get you the reports you need.
+          </p>
+          <ol>
+            <li>Product name</li>
+            <li>Application (residential or commercial), and whether IRC or IBC codes apply</li>
+            <li>State and county of installation</li>
+            <li>Information about the specific type of installation for the product</li>
+          </ol>
+          <p>
+            Please submit this information and any questions to <a href={`mailto:${site.email}`}>{site.email}</a>.
+            Upon receipt, we will review your request and reply with the corresponding answers, testing reports, and
+            installation recommendations for your application.
+          </p>
+        </div>
+      </section>
     </div>
   </section>
 </Layout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>(".filter-btn");
+  const groups = document.querySelectorAll<HTMLElement>(".product-group, .testing-reports");
+
+  function applyFilter(filter: string) {
+    const next = filter || "all";
+    buttons.forEach((item) => {
+      item.setAttribute("aria-pressed", item.dataset.filter === next ? "true" : "false");
+    });
+    groups.forEach((group) => {
+      const category = group.dataset.category || "all";
+      group.hidden = !(next === "all" || category === next);
+    });
+
+    const url = new URL(window.location.href);
+    if (next === "all") url.searchParams.delete("category");
+    else url.searchParams.set("category", next);
+    history.replaceState({}, "", url);
+  }
+
+  const initial = new URLSearchParams(window.location.search).get("category") || "all";
+  applyFilter(initial);
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => applyFilter(button.dataset.filter || "all"));
+  });
+</script>
