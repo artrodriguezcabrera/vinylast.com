@@ -9,7 +9,7 @@ export function lanesHref(path: string) {
 
 export const lanesNav = nav.map((item) => ({
   label: item.label,
-  href: lanesHref(item.href),
+  href: item.href === "/sourcing-design" ? item.href : lanesHref(item.href),
 }));
 
 export function isLanesCurrent(pathname: string, href: string) {

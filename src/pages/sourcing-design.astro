@@ -1,0 +1,75 @@
+---
+import Layout from "../layouts/Layout.astro";
+import CtaBand from "../components/CtaBand.astro";
+import SourcingRow from "../components/SourcingRow.astro";
+---
+
+<Layout
+  title="Sourcing & Design"
+  description="Vinylast offers design, development, and resourcing with fabrication partners, patented components, and in-house manufacturing."
+  currentPath="/sourcing-design"
+>
+  <section class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow">Sourcing & Design</p>
+      <h1>The right product, specified for the job.</h1>
+      <p>
+        Tell us the application. We help you choose the railing, fencing, or accessory,
+        and the details that make it install cleanly.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <p>
+        For over 30 years Vinylast Inc. has offered design, development and resourcing in partnership
+        with our fabrication teams around the world. We currently hold many patents on different parts
+        and systems including aluminum railing, post mounts and post brackets, infill baluster systems,
+        window components, cable rail components and many other designs and components. All of our
+        in-house manufacturing facilities have a well-trained work force and state of the art equipment
+        to ensure the highest quality and performance from all of our imported and locally fabricated
+        product lines.
+      </p>
+      <div class="sourcing-rows">
+        <SourcingRow
+          title="Services"
+          items={[
+            "Complete design, development and global product resourcing.",
+            "OEM and private label programs packaged as needed.",
+            "Direct shipping and stocking programs in the USA.",
+            "3rd party testing and certification.",
+          ]}
+        />
+        <SourcingRow
+          title="Products"
+          items={[
+            "Aluminum and steel railing systems and components.",
+            "Complete ADA railing systems.",
+            "Stainless steel cable rail components.",
+            "Glass, aluminum and horizontal baluster systems.",
+            "Post mounts and post brackets.",
+            "Window components.",
+            "Casting components in aluminum, zinc and stainless steel.",
+            "Injection molded parts in a variety of colors and plastics.",
+            "Steel and aluminum stampings.",
+          ]}
+        />
+        <SourcingRow
+          title="What sets us apart"
+          items={[
+            "Certified and integrated powder coat paint line.",
+            "High speed casters and injection molders.",
+            "Robotic welders and finishers.",
+            "CNC milling and laser cutting in house.",
+            "CCRR inspections and certification.",
+            "QC implementations throughout manufacturing and shipping.",
+            "Door to door delivery tracking.",
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Build with us" text="Tell us what you are installing. We will point you to the right product and paperwork." />
+</Layout>

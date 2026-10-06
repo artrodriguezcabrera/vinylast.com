@@ -992,6 +992,34 @@ a {
   color: var(--brand-blue);
 }
 
+.sourcing-rows {
+  display: grid;
+  gap: 2.75rem;
+  margin-top: 2.75rem;
+}
+
+.sourcing-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.sourcing-row-media {
+  flex: 0 0 20%;
+  aspect-ratio: 1;
+  background: var(--brand-blue-soft);
+  border-radius: 0.35rem;
+}
+
+.sourcing-row .prose {
+  flex: 1;
+  min-width: 0;
+}
+
+.sourcing-row .prose h2 {
+  margin-top: 0;
+}
+
 .split-2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1335,6 +1363,15 @@ a {
   .thumbs button {
     width: auto;
     height: auto;
+  }
+
+  .sourcing-row {
+    flex-direction: column;
+  }
+
+  .sourcing-row-media {
+    flex-basis: auto;
+    width: 100%;
   }
 }
 
