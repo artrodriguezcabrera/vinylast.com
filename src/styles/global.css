@@ -813,7 +813,11 @@ a {
     gap: 2.5rem;
   }
 
-  .product-gallery-images,
+  .product-gallery-images {
+    flex: 0 0 60%;
+    min-width: 0;
+  }
+
   .product-copy {
     flex: 1 1 0;
     min-width: 0;
