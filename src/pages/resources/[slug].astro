@@ -1,7 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getResourceBySlug, getResources, youtubeEmbedUrl } from "../../lib/contentful";
-import { resourceTypeLabels } from "../../lib/types";
 
 export async function getStaticPaths() {
   const resources = await getResources();
@@ -36,7 +35,7 @@ const embed = resource.videoUrl ? youtubeEmbedUrl(resource.videoUrl) : "";
         <span>{resource.title}</span>
       </nav>
 
-      <p class="card-kicker">{resourceTypeLabels[resource.type]}</p>
+      <!-- <p class="card-kicker">{resourceTypeLabels[resource.type]}</p> -->
       <h1 style="font-size: clamp(1.7rem, 3vw, 2.4rem); letter-spacing: -0.03em; margin: 0.35rem 0 1rem">
         {resource.title}
       </h1>

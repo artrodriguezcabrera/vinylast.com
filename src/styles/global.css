@@ -163,7 +163,7 @@ a {
 }
 
 .logo-link img {
-  height: 2.6rem;
+  height: 3.5rem;
   width: auto;
 }
 
@@ -1341,7 +1341,12 @@ a {
   }
 
   .logo-link img {
-    height: 2.15rem;
+    height: 2.5rem;
+  }
+
+  .section:has(.product-layout),
+  .section:has(.product-tabs) {
+    padding-block: 1rem;
   }
 
   .product-gallery:has(.thumbs) {

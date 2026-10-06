@@ -110,11 +110,13 @@ const resourceCards = usingMockResources
           }
         </div>
         <div class="product-copy">
+          <!--
           {(product.category || product.series) && (
             <p class="card-kicker">
               {[product.category?.name, product.series].filter(Boolean).join(" · ")}
             </p>
           )}
+          -->
           <h1>{product.name}</h1>
           <p class="lede">{product.shortDescription}</p>
           <div class="btn-row" style="margin: 1.1rem 0 1.5rem">
