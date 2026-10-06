@@ -91,16 +91,7 @@ const videos = usingMockVideos
         <div>
           {
             thumbs.length > 0 && (
-              <>
-                <div class="gallery-main">
-                  <img
-                    id="gallery-image"
-                    src={thumbs[0].url}
-                    alt={thumbs[0].alt}
-                    width={thumbs[0].width}
-                    height={thumbs[0].height}
-                  />
-                </div>
+              <div class="product-gallery">
                 {thumbs.length > 1 && (
                   <div class="thumbs">
                     {thumbs.map((image, index) => (
@@ -110,7 +101,16 @@ const videos = usingMockVideos
                     ))}
                   </div>
                 )}
-              </>
+                <div class="gallery-main">
+                  <img
+                    id="gallery-image"
+                    src={thumbs[0].url}
+                    alt={thumbs[0].alt}
+                    width={thumbs[0].width}
+                    height={thumbs[0].height}
+                  />
+                </div>
+              </div>
             )
           }
         </div>
