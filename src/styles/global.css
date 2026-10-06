@@ -799,7 +799,25 @@ a {
 }
 
 .product-layout.is-copy-only {
-  grid-template-columns: minmax(0, 40rem);
+  max-width: 40rem;
+}
+
+.product-layout.is-copy-only .product-gallery-images {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .product-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 2.5rem;
+  }
+
+  .product-gallery-images,
+  .product-copy {
+    flex: 1 1 0;
+    min-width: 0;
+  }
 }
 
 .product-gallery {
