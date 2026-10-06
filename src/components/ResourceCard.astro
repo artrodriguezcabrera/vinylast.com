@@ -1,5 +1,5 @@
 ---
-import { resourceTypeLabels, type Resource } from "../lib/types";
+import { type Resource } from "../lib/types";
 
 interface Props {
   resource: Resource;
@@ -23,7 +23,7 @@ const href = `/resources/${resource.slug}`;
     )
   }
   <div class="card-body">
-    <p class="card-kicker">{resourceTypeLabels[resource.type]}</p>
+    <!-- <p class="card-kicker">{resourceTypeLabels[resource.type]}</p> -->
     <h3>{resource.title}</h3>
     {resource.shortDescription && <p>{resource.shortDescription}</p>}
     <span class="card-link">{resource.file ? "View & download" : "View resource"}</span>

@@ -163,7 +163,7 @@ a {
 }
 
 .logo-link img {
-  height: 2.6rem;
+  height: 3.5rem;
   width: auto;
 }
 
@@ -799,7 +799,40 @@ a {
 }
 
 .product-layout.is-copy-only {
-  grid-template-columns: minmax(0, 40rem);
+  max-width: 40rem;
+}
+
+.product-layout.is-copy-only .product-gallery-images {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .product-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 2.5rem;
+  }
+
+  .product-gallery-images {
+    flex: 0 0 60%;
+    min-width: 0;
+  }
+
+  .product-copy {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}
+
+.product-gallery {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+}
+
+.product-gallery:has(.thumbs) {
+  grid-template-columns: 4.75rem minmax(0, 1fr);
+  gap: 0.5rem;
 }
 
 .gallery-main {
@@ -817,13 +850,15 @@ a {
 }
 
 .thumbs {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));
+  display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  margin-top: 0.6rem;
 }
 
 .thumbs button {
+  width: 4.75rem;
+  height: 4.75rem;
+  flex-shrink: 0;
   border: 2px solid transparent;
   padding: 0;
   background: var(--surface);
@@ -955,6 +990,34 @@ a {
 .feature-list li::marker,
 .prose li::marker {
   color: var(--brand-blue);
+}
+
+.sourcing-rows {
+  display: grid;
+  gap: 2.75rem;
+  margin-top: 2.75rem;
+}
+
+.sourcing-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+.sourcing-row-media {
+  flex: 0 0 20%;
+  aspect-ratio: 1;
+  background: var(--brand-blue-soft);
+  border-radius: 0.35rem;
+}
+
+.sourcing-row .prose {
+  flex: 1;
+  min-width: 0;
+}
+
+.sourcing-row .prose h2 {
+  margin-top: 0;
 }
 
 .split-2 {
@@ -1278,7 +1341,42 @@ a {
   }
 
   .logo-link img {
-    height: 2.15rem;
+    height: 2.5rem;
+  }
+
+  .section:has(.product-layout),
+  .section:has(.product-tabs) {
+    padding-block: 1rem;
+  }
+
+  .product-gallery:has(.thumbs) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .gallery-main {
+    order: -1;
+  }
+
+  .thumbs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));
+    gap: 0.5rem;
+    margin-top: 0.6rem;
+  }
+
+  .thumbs button {
+    width: auto;
+    height: auto;
+  }
+
+  .sourcing-row {
+    flex-direction: column;
+  }
+
+  .sourcing-row-media {
+    flex-basis: auto;
+    width: 100%;
   }
 }
 
