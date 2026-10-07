@@ -21,8 +21,8 @@ export const resourceCategories: ResourceCategory[] = [
   { name: "Resource Information", slug: "resource-information" },
   { name: "Vinyl Fencing", slug: "vinyl-fencing" },
   { name: "Vinyl Railing", slug: "vinyl-railing" },
-  { name: "Warranty and Maintenance", slug: "warranty-and-maintenance" },
-  { name: "Window and Door", slug: "window-and-door" },
+  { name: "Warranty & Maintenance", slug: "warranty-and-maintenance" },
+  { name: "Window & Door", slug: "window-and-door" },
 ];
 
 export const resourceDocuments: ResourceDocument[] = [

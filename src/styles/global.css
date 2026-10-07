@@ -1000,15 +1000,29 @@ a {
 
 .sourcing-row {
   display: flex;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 2rem;
 }
 
 .sourcing-row-media {
-  flex: 0 0 20%;
-  aspect-ratio: 1;
+  /* Square side matches the Products block: heading plus nine list lines. */
+  --sourcing-square: calc(1.55 * clamp(1.5rem, 3vw, 2rem) + 9 * 1.55rem + 8 * 0.4rem);
+  flex: 0 0 var(--sourcing-square);
+  width: var(--sourcing-square);
+  height: var(--sourcing-square);
+  align-self: flex-start;
+  position: relative;
+  overflow: hidden;
   background: var(--brand-blue-soft);
   border-radius: 0.35rem;
+}
+
+.sourcing-row-media img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .sourcing-row .prose {
@@ -1377,6 +1391,8 @@ a {
   .sourcing-row-media {
     flex-basis: auto;
     width: 100%;
+    height: auto;
+    aspect-ratio: 1;
   }
 }
 
