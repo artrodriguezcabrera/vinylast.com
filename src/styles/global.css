@@ -831,11 +831,12 @@ a {
 }
 
 .product-gallery:has(.thumbs) {
-  grid-template-columns: 4.75rem minmax(0, 1fr);
-  gap: 0.5rem;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0;
 }
 
 .gallery-main {
+  order: -1;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 0.35rem;
@@ -850,15 +851,13 @@ a {
 }
 
 .thumbs {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(4.75rem, 1fr));
   gap: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .thumbs button {
-  width: 4.75rem;
-  height: 4.75rem;
-  flex-shrink: 0;
   border: 2px solid transparent;
   padding: 0;
   background: var(--surface);
