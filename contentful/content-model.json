@@ -108,6 +108,27 @@
           "validations": [{ "unique": true }]
         },
         {
+          "id": "productLine",
+          "name": "Product line",
+          "type": "Symbol",
+          "required": true,
+          "validations": [
+            {
+              "in": [
+                "Accessories",
+                "Aluminum Fencing",
+                "Aluminum Railing",
+                "Pergola",
+                "Resource Information",
+                "Vinyl Fencing",
+                "Vinyl Railing",
+                "Warranty & Maintenance",
+                "Window & Door"
+              ]
+            }
+          ]
+        },
+        {
           "id": "type",
           "name": "Type",
           "type": "Symbol",

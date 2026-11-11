@@ -54,6 +54,7 @@ type ResourceFields = {
   title: string;
   slug: string;
   type?: string;
+  productLine?: string;
   thumbnail?: unknown;
   file?: unknown;
   videoUrl?: string;
@@ -215,6 +216,7 @@ function mapResourceLite(entry: Entry<EntrySkeletonType>): Resource | undefined 
     title: fields.title,
     slug: fields.slug,
     type: asResourceType(fields.type),
+    productLine: fields.productLine || "",
     thumbnail: readImage(fields.thumbnail, fields.title),
     file: readFile(fields.file, fields.title),
     videoUrl: fields.videoUrl,

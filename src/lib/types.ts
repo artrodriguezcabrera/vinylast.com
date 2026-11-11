@@ -24,6 +24,18 @@ export const resourceTypeLabels: Record<ResourceType, string> = {
   other: "Other",
 };
 
+export const resourceProductLines = [
+  "Accessories",
+  "Aluminum Fencing",
+  "Aluminum Railing",
+  "Pergola",
+  "Resource Information",
+  "Vinyl Fencing",
+  "Vinyl Railing",
+  "Warranty & Maintenance",
+  "Window & Door",
+] as const;
+
 export type AssetImage = {
   url: string;
   alt: string;
@@ -64,6 +76,7 @@ export type Resource = {
   title: string;
   slug: string;
   type: ResourceType;
+  productLine: string;
   thumbnail?: AssetImage;
   file?: AssetFile;
   videoUrl?: string;
