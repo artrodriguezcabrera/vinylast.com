@@ -95,6 +95,7 @@ export type Product = {
   hero?: AssetImage;
   gallery: AssetImage[];
   features: string[];
+  options: string[];
   specs: Spec[];
   videos: Video[];
   relatedResources: Resource[];

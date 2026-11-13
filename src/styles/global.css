@@ -884,6 +884,10 @@ a {
   margin: 0.35rem 0 0.75rem;
 }
 
+.product-copy .options-heading {
+  margin-top: 1.5rem;
+}
+
 .specs {
   width: 100%;
   border-collapse: collapse;

@@ -216,6 +216,10 @@ body.lanes-home .header-area.header--transparent .primary-menu > li.is-current >
   margin: 1rem 0 0;
 }
 
+.options-heading {
+  margin-top: 1.5rem;
+}
+
 .feature-list li {
   margin-bottom: 0.4rem;
 }

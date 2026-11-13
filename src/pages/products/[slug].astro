@@ -139,6 +139,18 @@ const resourceCards = usingMockResources
               </>
             )
           }
+          {
+            product.options.length > 0 && (
+              <>
+                <h2 class="options-heading">Available options</h2>
+                <ul class="feature-list">
+                  {product.options.map((option) => (
+                    <li>{option}</li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
         </div>
       </div>
     </div>

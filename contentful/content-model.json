@@ -70,6 +70,12 @@
           "items": { "type": "Symbol" }
         },
         {
+          "id": "options",
+          "name": "Available options",
+          "type": "Array",
+          "items": { "type": "Symbol" }
+        },
+        {
           "id": "specs",
           "name": "Specs",
           "type": "Text",

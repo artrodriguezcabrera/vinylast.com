@@ -100,6 +100,18 @@ const relatedFallback =
                       </ul>
                     )
                   }
+                  {
+                    product.options.length > 0 && (
+                      <>
+                        <h5 class="heading heading-h5 options-heading">Available options</h5>
+                        <ul class="feature-list">
+                          {product.options.map((option) => (
+                            <li>{option}</li>
+                          ))}
+                        </ul>
+                      </>
+                    )
+                  }
                   <div class="product-meta mt--30">
                     {
                       product.category && (

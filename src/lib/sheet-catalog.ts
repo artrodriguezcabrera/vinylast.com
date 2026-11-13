@@ -54,6 +54,7 @@ function product(input: {
   series: string;
   shortDescription: string;
   features: string[];
+  options?: string[];
   specs?: Spec[];
   infill?: string;
   featured?: boolean;
@@ -74,6 +75,7 @@ function product(input: {
     hero: gallery[0],
     gallery,
     features: input.features,
+    options: input.options || [],
     specs,
     videos: [],
     relatedResources: [],

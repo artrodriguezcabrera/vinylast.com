@@ -44,6 +44,7 @@ type ProductFields = {
   hero?: unknown;
   gallery?: unknown[];
   features?: string[];
+  options?: string[];
   specs?: unknown;
   videos?: unknown;
   relatedResources?: unknown[];
@@ -251,6 +252,7 @@ function mapProduct(entry: Entry<EntrySkeletonType>): Product | undefined {
     hero: readImage(fields.hero, fields.name) || gallery[0],
     gallery,
     features: Array.isArray(fields.features) ? fields.features.filter(Boolean) : [],
+    options: Array.isArray(fields.options) ? fields.options.filter(Boolean) : [],
     specs: parseSpecs(fields.specs),
     videos: parseVideos(fields.videos),
     relatedResources: related,
