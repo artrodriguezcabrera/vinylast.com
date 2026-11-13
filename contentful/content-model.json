@@ -49,7 +49,6 @@
           "type": "Text",
           "required": true
         },
-        { "id": "body", "name": "Body", "type": "RichText" },
         {
           "id": "hero",
           "name": "Hero image",

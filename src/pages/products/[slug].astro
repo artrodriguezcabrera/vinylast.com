@@ -20,9 +20,6 @@ if (!product) {
 
 const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
 const hasResources = product.relatedResources.length > 0;
-const detailsHtml = product.bodyHtml?.replace(/<[^>]*>/g, "").trim() ? product.bodyHtml : "";
-const hasDetails = Boolean(detailsHtml);
-const hasTabs = hasResources || hasDetails;
 
 const resourceCards = product.relatedResources.map((resource) => {
   const file = resource.file?.url;
@@ -122,35 +119,22 @@ const resourceCards = product.relatedResources.map((resource) => {
   </section>
 
   {
-    hasTabs && (
+    hasResources && (
   <section class="section">
     <div class="wrap">
       <div class="product-tabs">
         <div class="product-tabs-nav" role="tablist" aria-label="Product details">
-          {
-            hasResources && (
-              <button type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="true">
-                Resources
-              </button>
-            )
-          }
-          {
-            hasDetails && (
-              <button type="button" role="tab" id="tab-description" aria-controls="panel-description" aria-selected={hasResources ? "false" : "true"}>
-                Other Details
-              </button>
-            )
-          }
+          <button type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="true">
+            Resources
+          </button>
         </div>
 
-        {
-          hasResources && (
-            <div
-              class="product-tabs-panel"
-              role="tabpanel"
-              id="panel-resources"
-              aria-labelledby="tab-resources"
-            >
+        <div
+          class="product-tabs-panel"
+          role="tabpanel"
+          id="panel-resources"
+          aria-labelledby="tab-resources"
+        >
               <div class="cards">
                 {
                   resourceCards.map((resource) => (
@@ -183,25 +167,7 @@ const resourceCards = product.relatedResources.map((resource) => {
                   ))
                 }
               </div>
-            </div>
-          )
-        }
-
-        {
-          hasDetails && (
-            <div
-              class="product-tabs-panel"
-              role="tabpanel"
-              id="panel-description"
-              aria-labelledby="tab-description"
-              hidden={hasResources}
-            >
-              <div class="prose">
-                <Fragment set:html={detailsHtml} />
-              </div>
-            </div>
-          )
-        }
+        </div>
       </div>
     </div>
   </section>

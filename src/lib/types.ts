@@ -74,7 +74,6 @@ export type Product = {
   slug: string;
   category?: Category;
   shortDescription: string;
-  bodyHtml?: string;
   hero?: AssetImage;
   gallery: AssetImage[];
   features: string[];

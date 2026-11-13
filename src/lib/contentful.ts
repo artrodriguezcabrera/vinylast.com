@@ -1,5 +1,3 @@
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
-import type { Document } from "@contentful/rich-text-types";
 import { createClient, type Entry, type EntrySkeletonType } from "contentful";
 import {
   fallbackCategories,
@@ -37,7 +35,6 @@ type ProductFields = {
   slug: string;
   category?: Entry | unknown;
   shortDescription?: string;
-  body?: Document;
   hero?: unknown;
   gallery?: unknown[];
   features?: string[];
@@ -183,7 +180,6 @@ function mapProduct(entry: Entry<EntrySkeletonType>): Product | undefined {
     slug: fields.slug,
     category: categoryEntry?.fields ? mapCategory(categoryEntry) : undefined,
     shortDescription: fields.shortDescription || "",
-    bodyHtml: fields.body ? documentToHtmlString(fields.body) : undefined,
     hero: readImage(fields.hero, fields.name) || gallery[0],
     gallery,
     features: Array.isArray(fields.features) ? fields.features.filter(Boolean) : [],

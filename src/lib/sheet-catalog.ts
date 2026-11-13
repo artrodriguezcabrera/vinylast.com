@@ -54,7 +54,6 @@ function product(input: {
   shortDescription: string;
   features: string[];
   options?: string[];
-  extraHtml?: string;
 }): Product {
   const gallery = productGalleries[input.slug] || [];
   return {
@@ -63,7 +62,6 @@ function product(input: {
     slug: input.slug,
     category: input.category,
     shortDescription: input.shortDescription,
-    bodyHtml: input.extraHtml,
     hero: gallery[0],
     gallery,
     features: input.features,
@@ -370,7 +368,6 @@ export const sheetProducts: Product[] = [
     category: catWindows,
     shortDescription:
       "Vinylast has distributed the full Harvey window and door line for more than 30 years — new construction and replacement, built for Northeast weather.",
-    extraHtml: `<p>Since 1961 Harvey has helped customers and builders deliver for homeowners. Products are built for tough northern winters and hot summers. For the full line, see <a href="https://harveywindows.com/">harveywindows.com</a>.</p>`,
     features: [
       "Full line of new-construction and replacement windows and doors",
       "Many styles and colors",

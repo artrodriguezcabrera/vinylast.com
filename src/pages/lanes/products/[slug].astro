@@ -151,13 +151,7 @@ const relatedFallback =
         <div class="tab_container">
           <div class="single_review_content tab-pane fade show active" id="descrip" role="tabpanel">
             <div class="content">
-              {
-                product.bodyHtml ? (
-                  <Fragment set:html={product.bodyHtml} />
-                ) : (
-                  <p>{product.shortDescription}</p>
-                )
-              }
+              <p>{product.shortDescription}</p>
             </div>
           </div>
         </div>
