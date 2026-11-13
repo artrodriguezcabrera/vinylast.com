@@ -150,13 +150,6 @@ const relatedFallback =
               <a class="active" id="descrip-tab" data-bs-toggle="tab" href="#descrip" role="tab" aria-controls="descrip" aria-selected="true">
                 Description
               </a>
-              {
-                product.specs.length > 0 && (
-                  <a id="specs-tab" data-bs-toggle="tab" href="#specs" role="tab" aria-controls="specs" aria-selected="false">
-                    Specs
-                  </a>
-                )
-              }
             </div>
           </div>
         </div>
@@ -172,24 +165,6 @@ const relatedFallback =
               }
             </div>
           </div>
-          {
-            product.specs.length > 0 && (
-              <div class="single_review_content tab-pane fade" id="specs" role="tabpanel">
-                <div class="content">
-                  <table class="specs-table">
-                    <tbody>
-                      {product.specs.map((spec) => (
-                        <tr>
-                          <th scope="row">{spec.name}</th>
-                          <td>{spec.value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )
-          }
         </div>
       </div>
     </div>

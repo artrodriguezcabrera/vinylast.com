@@ -224,23 +224,6 @@ body.lanes-home .header-area.header--transparent .primary-menu > li.is-current >
   margin-bottom: 0.4rem;
 }
 
-.specs-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.specs-table th,
-.specs-table td {
-  border-bottom: 1px solid #eee;
-  padding: 0.7rem 0.4rem;
-  text-align: left;
-}
-
-.specs-table th {
-  width: 40%;
-  font-weight: 600;
-}
-
 .lanes-alert {
   background: #e8f6ee;
   border: 1px solid #b7e0c4;

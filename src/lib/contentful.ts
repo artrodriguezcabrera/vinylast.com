@@ -14,7 +14,6 @@ import type {
   Product,
   Resource,
   ResourceType,
-  Spec,
   Video,
 } from "./types";
 
@@ -45,7 +44,6 @@ type ProductFields = {
   gallery?: unknown[];
   features?: string[];
   options?: string[];
-  specs?: unknown;
   videos?: unknown;
   relatedResources?: unknown[];
   featured?: boolean;
@@ -128,34 +126,6 @@ function readFile(value: unknown, fallbackTitle = ""): AssetFile | undefined {
     };
   }
   return undefined;
-}
-
-function parseSpecs(value: unknown): Spec[] {
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => {
-        if (typeof item === "string") {
-          const [name, ...rest] = item.split(":");
-          return { name: name.trim(), value: rest.join(":").trim() };
-        }
-        const rec = asRecord(item);
-        if (!rec) return null;
-        const name = String(rec.name ?? rec.label ?? "").trim();
-        const specValue = String(rec.value ?? "").trim();
-        return name && specValue ? { name, value: specValue } : null;
-      })
-      .filter((item): item is Spec => Boolean(item?.name && item.value));
-  }
-  if (typeof value === "string") {
-    return value
-      .split("\n")
-      .map((line) => {
-        const [name, ...rest] = line.split(":");
-        return { name: name.trim(), value: rest.join(":").trim() };
-      })
-      .filter((item) => item.name && item.value);
-  }
-  return [];
 }
 
 function parseVideos(value: unknown): Video[] {
@@ -253,7 +223,6 @@ function mapProduct(entry: Entry<EntrySkeletonType>): Product | undefined {
     gallery,
     features: Array.isArray(fields.features) ? fields.features.filter(Boolean) : [],
     options: Array.isArray(fields.options) ? fields.options.filter(Boolean) : [],
-    specs: parseSpecs(fields.specs),
     videos: parseVideos(fields.videos),
     relatedResources: related,
     featured: Boolean(fields.featured),

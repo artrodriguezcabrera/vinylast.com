@@ -1,5 +1,5 @@
 import { productGalleries } from "./product-images";
-import type { Category, Product, Spec } from "./types";
+import type { Category, Product } from "./types";
 
 export const catVinylRailing: Category = {
   id: "cat-vinyl-railing",
@@ -55,14 +55,9 @@ function product(input: {
   shortDescription: string;
   features: string[];
   options?: string[];
-  specs?: Spec[];
-  infill?: string;
   featured?: boolean;
   extraHtml?: string;
 }): Product {
-  const specs = [...(input.specs || [])];
-  if (input.infill) specs.push({ name: "Infill options", value: input.infill });
-  specs.push({ name: "Series", value: input.series });
   const gallery = productGalleries[input.slug] || [];
   return {
     id: `prod-${input.slug}`,
@@ -76,7 +71,6 @@ function product(input: {
     gallery,
     features: input.features,
     options: input.options || [],
-    specs,
     videos: [],
     relatedResources: [],
     featured: Boolean(input.featured),
@@ -103,8 +97,6 @@ export const sheetProducts: Product[] = [
       "Colors: White and limited special-order colors",
       "Top rail 3.5\" × 3.5\"; bottom rail 2\" × 3.5\"",
     ],
-    infill:
-      "Vinyl 1-3/8\" square baluster; glass slats; black aluminum 3/4\" round or square; horizontal baluster in black and anodized",
   }),
   product({
     slug: "palisade",
@@ -124,8 +116,6 @@ export const sheetProducts: Product[] = [
       "Colors: White and limited special-order colors",
       "Top rail 3\" × 2.5\"; bottom rail 2\" × 3.5\"",
     ],
-    infill:
-      "Vinyl 1-3/8\" square baluster; glass slats; black aluminum 3/4\" round or square; horizontal baluster in black and anodized",
   }),
   product({
     slug: "2-box",
@@ -145,8 +135,6 @@ export const sheetProducts: Product[] = [
       "Colors: White and limited special-order colors",
       "Top rail 2\" × 3.5\"; bottom rail 2\" × 3.5\"",
     ],
-    infill:
-      "Vinyl 1-3/8\" square baluster; glass slats; black aluminum 3/4\" round or square; horizontal baluster in black and anodized",
   }),
   product({
     slug: "3000-series",
@@ -165,8 +153,6 @@ export const sheetProducts: Product[] = [
       "Colors: White, Clay, Almond, and Black",
       "Top rail 3\" × 3.5\"; bottom rail 2\" × 3.5\"",
     ],
-    specs: [{ name: "Availability", value: "Superior special order — ask the office" }],
-    infill: "Vinyl 1.3\" square plus two turned baluster designs; black aluminum 3/4\" round or square",
   }),
   product({
     slug: "5000-series",
@@ -185,8 +171,6 @@ export const sheetProducts: Product[] = [
       "Colors: White, Clay, Almond, and Black",
       "4-1/4\" × 3.5\" top and bottom rails",
     ],
-    specs: [{ name: "Availability", value: "Superior special order — ask the office" }],
-    infill: "Vinyl 2-5/8\" turned baluster designs",
   }),
   product({
     slug: "montego",
@@ -421,6 +405,5 @@ export const sheetProducts: Product[] = [
       "Energy-efficient glass options and grid patterns",
       "Styles include bays, bows, sliders, single hung, double hung, casements, awnings, and more",
     ],
-    specs: [{ name: "Manufacturer", value: "Harvey — harveywindows.com" }],
   }),
 ];

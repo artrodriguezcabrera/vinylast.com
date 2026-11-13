@@ -888,26 +888,6 @@ a {
   margin-top: 1.5rem;
 }
 
-.specs {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 0.75rem;
-}
-
-.specs th,
-.specs td {
-  text-align: left;
-  vertical-align: top;
-  padding: 0.7rem 0.4rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.specs th {
-  width: 32%;
-  color: var(--text-muted);
-  font-weight: 600;
-}
-
 .product-tabs-nav {
   display: flex;
   flex-wrap: wrap;
@@ -941,10 +921,6 @@ a {
 
 .product-tabs-panel[hidden] {
   display: none;
-}
-
-.product-tabs-panel .prose + .specs {
-  margin-top: 1.5rem;
 }
 
 .product-tabs-panel .lede {

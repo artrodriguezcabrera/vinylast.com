@@ -22,7 +22,7 @@ const thumbs = product.gallery.length ? product.gallery : product.hero ? [produc
 const hasResources = product.relatedResources.length > 0;
 const hasVideos = product.videos.length > 0;
 const detailsHtml = product.bodyHtml?.replace(/<[^>]*>/g, "").trim() ? product.bodyHtml : "";
-const hasDetails = Boolean(detailsHtml) || product.specs.length > 0;
+const hasDetails = Boolean(detailsHtml);
 const hasTabs = hasResources || hasDetails || hasVideos;
 
 const resourceCards = product.relatedResources.map((resource) => {
@@ -216,27 +216,9 @@ const resourceCards = product.relatedResources.map((resource) => {
               aria-labelledby="tab-description"
               hidden={hasResources}
             >
-              {
-                detailsHtml && (
-                  <div class="prose">
-                    <Fragment set:html={detailsHtml} />
-                  </div>
-                )
-              }
-              {
-                product.specs.length > 0 && (
-                  <table class="specs">
-                    <tbody>
-                      {product.specs.map((spec) => (
-                        <tr>
-                          <th scope="row">{spec.name}</th>
-                          <td>{spec.value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )
-              }
+              <div class="prose">
+                <Fragment set:html={detailsHtml} />
+              </div>
             </div>
           )
         }

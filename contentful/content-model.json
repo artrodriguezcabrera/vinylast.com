@@ -76,12 +76,6 @@
           "items": { "type": "Symbol" }
         },
         {
-          "id": "specs",
-          "name": "Specs",
-          "type": "Text",
-          "helpText": "One per line: Label: Value"
-        },
-        {
           "id": "videos",
           "name": "Videos",
           "type": "Text",

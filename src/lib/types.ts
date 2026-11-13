@@ -56,11 +56,6 @@ export type Category = {
   image?: AssetImage;
 };
 
-export type Spec = {
-  name: string;
-  value: string;
-};
-
 export type Video = {
   title: string;
   url: string;
@@ -96,7 +91,6 @@ export type Product = {
   gallery: AssetImage[];
   features: string[];
   options: string[];
-  specs: Spec[];
   videos: Video[];
   relatedResources: Resource[];
   featured: boolean;
