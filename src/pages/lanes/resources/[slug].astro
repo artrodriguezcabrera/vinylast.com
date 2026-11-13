@@ -70,20 +70,6 @@ const embed = resource.videoUrl ? youtubeEmbedUrl(resource.videoUrl) : "";
             />
           )
         }
-
-        {
-          resource.relatedProducts.length > 0 && (
-            <p class="mt--40">
-              Related products:{" "}
-              {resource.relatedProducts.map((product, index) => (
-                <>
-                  {index > 0 && " · "}
-                  <a href={lanesHref(`/products/${product.slug}`)}>{product.name}</a>
-                </>
-              ))}
-            </p>
-          )
-        }
       </div>
     </div>
   </div>

@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../lib/contentful";
+import { getProductBySlug, getProducts } from "../../lib/contentful";
 import { resourceThumbnail } from "../../lib/resource-documents";
 
 export async function getStaticPaths() {
@@ -20,10 +20,9 @@ if (!product) {
 
 const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
 const hasResources = product.relatedResources.length > 0;
-const hasVideos = product.videos.length > 0;
 const detailsHtml = product.bodyHtml?.replace(/<[^>]*>/g, "").trim() ? product.bodyHtml : "";
 const hasDetails = Boolean(detailsHtml);
-const hasTabs = hasResources || hasDetails || hasVideos;
+const hasTabs = hasResources || hasDetails;
 
 const resourceCards = product.relatedResources.map((resource) => {
   const file = resource.file?.url;
@@ -147,13 +146,6 @@ const resourceCards = product.relatedResources.map((resource) => {
               </button>
             )
           }
-          {
-            hasVideos && (
-              <button type="button" role="tab" id="tab-videos" aria-controls="panel-videos" aria-selected={hasResources || hasDetails ? "false" : "true"}>
-                Videos
-              </button>
-            )
-          }
         </div>
 
         {
@@ -211,35 +203,6 @@ const resourceCards = product.relatedResources.map((resource) => {
             >
               <div class="prose">
                 <Fragment set:html={detailsHtml} />
-              </div>
-            </div>
-          )
-        }
-
-        {
-          hasVideos && (
-            <div
-              class="product-tabs-panel"
-              role="tabpanel"
-              id="panel-videos"
-              aria-labelledby="tab-videos"
-              hidden={hasResources || hasDetails}
-            >
-              <div class="video-grid">
-                {
-                  product.videos.map((video) => (
-                    <div>
-                      <iframe
-                        class="video-frame"
-                        src={youtubeEmbedUrl(video.url)}
-                        title={video.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                      />
-                      <p style="margin-top: 0.5rem">{video.title}</p>
-                    </div>
-                  ))
-                }
               </div>
             </div>
           )

@@ -56,16 +56,6 @@ export type Category = {
   image?: AssetImage;
 };
 
-export type Video = {
-  title: string;
-  url: string;
-};
-
-export type RelatedProduct = {
-  name: string;
-  slug: string;
-};
-
 export type Resource = {
   id: string;
   title: string;
@@ -76,7 +66,6 @@ export type Resource = {
   file?: AssetFile;
   videoUrl?: string;
   shortDescription: string;
-  relatedProducts: RelatedProduct[];
 };
 
 export type Product = {
@@ -90,7 +79,6 @@ export type Product = {
   gallery: AssetImage[];
   features: string[];
   options: string[];
-  videos: Video[];
   relatedResources: Resource[];
 };
 

@@ -34,10 +34,10 @@ Create a space, then add the three content types in [contentful/content-model.js
 | Type ID | Use |
 | --- | --- |
 | `category` | Product grouping (name, slug, optional image) |
-| `product` | Catalog item (slug, copy, images, features, videos, related resources) |
+| `product` | Catalog item (slug, copy, images, features, related resources) |
 | `resource` | Download or video (type: `install`, `spec`, `warranty`, `catalog`, `video`, `other`) |
 
-Field IDs must match the JSON (`shortDescription`, `relatedResources`, etc.). Videos are one `Title | https://youtube.com/watch?v=...` per line.
+Field IDs must match the JSON (`shortDescription`, `relatedResources`, etc.).
 
 Publish entries, then trigger a Netlify rebuild (see webhook below).
 

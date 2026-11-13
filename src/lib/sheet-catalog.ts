@@ -68,7 +68,6 @@ function product(input: {
     gallery,
     features: input.features,
     options: input.options || [],
-    videos: [],
     relatedResources: [],
   };
 }

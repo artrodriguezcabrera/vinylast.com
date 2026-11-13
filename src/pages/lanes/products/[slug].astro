@@ -3,7 +3,7 @@ import LanesLayout from "../../../layouts/LanesLayout.astro";
 import LanesPageHero from "../../../components/lanes/LanesPageHero.astro";
 import LanesProductCard from "../../../components/lanes/LanesProductCard.astro";
 import LanesResourceCard from "../../../components/lanes/LanesResourceCard.astro";
-import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../../lib/contentful";
+import { getProductBySlug, getProducts } from "../../../lib/contentful";
 import { lanesHref } from "../../../lib/lanes";
 
 export async function getStaticPaths() {
@@ -168,32 +168,6 @@ const relatedFallback =
         </div>
       </div>
     </div>
-
-    {
-      product.videos.length > 0 && (
-        <div class="feature-product-area bg-color pb--80" data-bg-color="#fff">
-          <div class="container">
-            <div class="section-title text-center">
-              <h2 class="title">Installation videos</h2>
-            </div>
-            <div class="row mt--20">
-              {product.videos.map((video) => (
-                <div class="col-lg-6 mt--30">
-                  <iframe
-                    class="video-frame"
-                    src={youtubeEmbedUrl(video.url)}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  />
-                  <p class="mt--10">{video.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    }
 
     {
       product.relatedResources.length > 0 && (

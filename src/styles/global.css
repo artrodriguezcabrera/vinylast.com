@@ -1057,12 +1057,6 @@ a {
   background: #000;
 }
 
-.video-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
 .empty {
   text-align: center;
   padding: 3rem 1rem;
@@ -1233,7 +1227,6 @@ a {
   .promo-grid,
   .product-layout,
   .split-2,
-  .video-grid,
   .footer-grid,
   .value-grid {
     grid-template-columns: 1fr 1fr;
@@ -1323,7 +1316,6 @@ a {
   .promo-grid,
   .product-layout,
   .split-2,
-  .video-grid,
   .footer-grid,
   .value-grid {
     grid-template-columns: 1fr;

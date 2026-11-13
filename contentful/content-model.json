@@ -75,12 +75,6 @@
           "items": { "type": "Symbol" }
         },
         {
-          "id": "videos",
-          "name": "Videos",
-          "type": "Text",
-          "helpText": "One per line: Title | https://youtube.com/watch?v=..."
-        },
-        {
           "id": "relatedResources",
           "name": "Related resources",
           "type": "Array",
@@ -154,16 +148,6 @@
           "id": "shortDescription",
           "name": "Short description",
           "type": "Text"
-        },
-        {
-          "id": "relatedProducts",
-          "name": "Related products",
-          "type": "Array",
-          "items": {
-            "type": "Link",
-            "linkType": "Entry",
-            "validations": [{ "linkContentType": ["product"] }]
-          }
         }
       ]
     }
