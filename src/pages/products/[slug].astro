@@ -19,44 +19,22 @@ if (!product) {
 }
 
 const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
-const mockThumb = product.hero || thumbs[0];
-const usingMockResources = product.relatedResources.length === 0;
+const hasResources = product.relatedResources.length > 0;
 const hasVideos = product.videos.length > 0;
+const detailsHtml = product.bodyHtml?.replace(/<[^>]*>/g, "").trim() ? product.bodyHtml : "";
+const hasDetails = Boolean(detailsHtml) || product.specs.length > 0;
+const hasTabs = hasResources || hasDetails || hasVideos;
 
-const resourceCards = usingMockResources
-  ? [
-      {
-        title: `${product.name} installation guide`,
-        href: "/contact",
-        image: mockThumb?.url,
-        external: false,
-        action: "Download PDF",
-      },
-      {
-        title: `${product.name} spec sheet`,
-        href: "/contact",
-        image: mockThumb?.url,
-        external: false,
-        action: "Download PDF",
-      },
-      {
-        title: "Vinylast limited warranty",
-        href: "/contact",
-        image: mockThumb?.url,
-        external: false,
-        action: "Download PDF",
-      },
-    ]
-  : product.relatedResources.map((resource) => {
-      const file = resource.file?.url;
-      return {
-        title: resource.title,
-        href: file || `/resources/${resource.slug}`,
-        image: resource.thumbnail?.url || (file?.startsWith("/documents/") ? resourceThumbnail(file) : undefined),
-        external: Boolean(file),
-        action: file ? "Download PDF" : "View resource",
-      };
-    });
+const resourceCards = product.relatedResources.map((resource) => {
+  const file = resource.file?.url;
+  return {
+    title: resource.title,
+    href: file || `/resources/${resource.slug}`,
+    image: resource.thumbnail?.url || (file?.startsWith("/documents/") ? resourceThumbnail(file) : undefined),
+    external: Boolean(file),
+    action: file ? "Download PDF" : "View resource",
+  };
+});
 ---
 
 <Layout
@@ -156,97 +134,112 @@ const resourceCards = usingMockResources
     </div>
   </section>
 
+  {
+    hasTabs && (
   <section class="section">
     <div class="wrap">
       <div class="product-tabs">
         <div class="product-tabs-nav" role="tablist" aria-label="Product details">
-          <button type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="true">
-            Resources
-          </button>
-          <button type="button" role="tab" id="tab-description" aria-controls="panel-description" aria-selected="false">
-            Other Details
-          </button>
+          {
+            hasResources && (
+              <button type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="true">
+                Resources
+              </button>
+            )
+          }
+          {
+            hasDetails && (
+              <button type="button" role="tab" id="tab-description" aria-controls="panel-description" aria-selected={hasResources ? "false" : "true"}>
+                Other Details
+              </button>
+            )
+          }
           {
             hasVideos && (
-              <button type="button" role="tab" id="tab-videos" aria-controls="panel-videos" aria-selected="false">
+              <button type="button" role="tab" id="tab-videos" aria-controls="panel-videos" aria-selected={hasResources || hasDetails ? "false" : "true"}>
                 Videos
               </button>
             )
           }
         </div>
 
-        <div
-          class="product-tabs-panel"
-          role="tabpanel"
-          id="panel-resources"
-          aria-labelledby="tab-resources"
-        >
-          {usingMockResources && <p class="lede">Sample downloads for this demo. Live PDFs will replace these.</p>}
-          <div class="cards">
-            {
-              resourceCards.map((resource) => (
-                <a
-                  class="card"
-                  href={resource.href}
-                  target={resource.external ? "_blank" : undefined}
-                  rel={resource.external ? "noopener noreferrer" : undefined}
-                >
-                  {
-                    resource.image && (
-                      <div class="card-media is-document">
-                        <img src={resource.image} alt="" />
+        {
+          hasResources && (
+            <div
+              class="product-tabs-panel"
+              role="tabpanel"
+              id="panel-resources"
+              aria-labelledby="tab-resources"
+            >
+              <div class="cards">
+                {
+                  resourceCards.map((resource) => (
+                    <a
+                      class="card"
+                      href={resource.href}
+                      target={resource.external ? "_blank" : undefined}
+                      rel={resource.external ? "noopener noreferrer" : undefined}
+                    >
+                      {
+                        resource.image && (
+                          <div class="card-media is-document">
+                            <img src={resource.image} alt="" />
+                          </div>
+                        )
+                      }
+                      <div class="card-body">
+                        <h3>{resource.title}</h3>
+                        <span class="card-link card-action">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                            <path d="M12 3v12"></path>
+                            <path d="m7 11 5 5 5-5"></path>
+                            <path d="M5 21h14"></path>
+                          </svg>
+                          {resource.action}
+                          {resource.external && <span class="visually-hidden"> (opens in a new tab)</span>}
+                        </span>
                       </div>
-                    )
-                  }
-                  <div class="card-body">
-                    <h3>{resource.title}</h3>
-                    <span class="card-link card-action">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-                        <path d="M12 3v12"></path>
-                        <path d="m7 11 5 5 5-5"></path>
-                        <path d="M5 21h14"></path>
-                      </svg>
-                      {resource.action}
-                      {resource.external && <span class="visually-hidden"> (opens in a new tab)</span>}
-                    </span>
-                  </div>
-                </a>
-              ))
-            }
-          </div>
-        </div>
-
-        <div
-          class="product-tabs-panel"
-          role="tabpanel"
-          id="panel-description"
-          aria-labelledby="tab-description"
-          hidden
-        >
-          {
-            product.bodyHtml ? (
-              <div class="prose">
-                <Fragment set:html={product.bodyHtml} />
+                    </a>
+                  ))
+                }
               </div>
-            ) : (
-              !product.specs.length && <p class="lede">{product.shortDescription}</p>
-            )
-          }
-          {
-            product.specs.length > 0 && (
-              <table class="specs">
-                <tbody>
-                  {product.specs.map((spec) => (
-                    <tr>
-                      <th scope="row">{spec.name}</th>
-                      <td>{spec.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )
-          }
-        </div>
+            </div>
+          )
+        }
+
+        {
+          hasDetails && (
+            <div
+              class="product-tabs-panel"
+              role="tabpanel"
+              id="panel-description"
+              aria-labelledby="tab-description"
+              hidden={hasResources}
+            >
+              {
+                detailsHtml && (
+                  <div class="prose">
+                    <Fragment set:html={detailsHtml} />
+                  </div>
+                )
+              }
+              {
+                product.specs.length > 0 && (
+                  <table class="specs">
+                    <tbody>
+                      {product.specs.map((spec) => (
+                        <tr>
+                          <th scope="row">{spec.name}</th>
+                          <td>{spec.value}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )
+              }
+            </div>
+          )
+        }
 
         {
           hasVideos && (
@@ -255,7 +248,7 @@ const resourceCards = usingMockResources
               role="tabpanel"
               id="panel-videos"
               aria-labelledby="tab-videos"
-              hidden
+              hidden={hasResources || hasDetails}
             >
               <div class="video-grid">
                 {
@@ -279,6 +272,8 @@ const resourceCards = usingMockResources
       </div>
     </div>
   </section>
+    )
+  }
 </Layout>
 
 <script>
