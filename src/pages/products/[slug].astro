@@ -91,11 +91,6 @@ const resourceCards = product.relatedResources.map((resource) => {
           <p class="lede">{product.shortDescription}</p>
           <div class="btn-row" style="margin: 1.1rem 0 1.5rem">
             <a class="btn btn-primary" href="/contact">Contact us about this product</a>
-            {product.relatedResources[0]?.file && (
-              <a class="btn btn-outline" href={product.relatedResources[0].file.url}>
-                Download spec
-              </a>
-            )}
           </div>
           {
             product.features.length > 0 && (
