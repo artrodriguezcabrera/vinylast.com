@@ -1,11 +1,11 @@
 ---
 import LanesLayout from "../../layouts/LanesLayout.astro";
 import LanesProductCard from "../../components/lanes/LanesProductCard.astro";
-import { getFeaturedProducts } from "../../lib/contentful";
+import { getProducts } from "../../lib/contentful";
 import { lanesHeroSlides, lanesHref } from "../../lib/lanes";
 import { site } from "../../lib/site";
 
-const featured = await getFeaturedProducts();
+const featured = (await getProducts()).slice(0, 3);
 ---
 
 <LanesLayout title={site.name} description={site.description} currentPath={lanesHref("/")} transparentHeader>

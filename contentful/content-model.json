@@ -43,7 +43,6 @@
           "linkType": "Entry",
           "validations": [{ "linkContentType": ["category"] }]
         },
-        { "id": "series", "name": "Series", "type": "Symbol" },
         {
           "id": "shortDescription",
           "name": "Short description",
@@ -90,8 +89,7 @@
             "linkType": "Entry",
             "validations": [{ "linkContentType": ["resource"] }]
           }
-        },
-        { "id": "featured", "name": "Featured on home", "type": "Boolean" }
+        }
       ]
     },
     {

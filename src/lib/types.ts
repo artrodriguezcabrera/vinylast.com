@@ -84,7 +84,6 @@ export type Product = {
   name: string;
   slug: string;
   category?: Category;
-  series?: string;
   shortDescription: string;
   bodyHtml?: string;
   hero?: AssetImage;
@@ -93,7 +92,6 @@ export type Product = {
   options: string[];
   videos: Video[];
   relatedResources: Resource[];
-  featured: boolean;
 };
 
 export type Catalog = {

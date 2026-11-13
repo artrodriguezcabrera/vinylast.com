@@ -37,7 +37,6 @@ type ProductFields = {
   name: string;
   slug: string;
   category?: Entry | unknown;
-  series?: string;
   shortDescription?: string;
   body?: Document;
   hero?: unknown;
@@ -46,7 +45,6 @@ type ProductFields = {
   options?: string[];
   videos?: unknown;
   relatedResources?: unknown[];
-  featured?: boolean;
 };
 
 type ResourceFields = {
@@ -216,7 +214,6 @@ function mapProduct(entry: Entry<EntrySkeletonType>): Product | undefined {
     name: fields.name,
     slug: fields.slug,
     category: categoryEntry?.fields ? mapCategory(categoryEntry) : undefined,
-    series: fields.series,
     shortDescription: fields.shortDescription || "",
     bodyHtml: fields.body ? documentToHtmlString(fields.body) : undefined,
     hero: readImage(fields.hero, fields.name) || gallery[0],
@@ -225,7 +222,6 @@ function mapProduct(entry: Entry<EntrySkeletonType>): Product | undefined {
     options: Array.isArray(fields.options) ? fields.options.filter(Boolean) : [],
     videos: parseVideos(fields.videos),
     relatedResources: related,
-    featured: Boolean(fields.featured),
   };
 }
 
@@ -305,12 +301,6 @@ export async function getProductBySlug(slug: string) {
 
 export async function getResourceBySlug(slug: string) {
   return (await getResources()).find((resource) => resource.slug === slug);
-}
-
-export async function getFeaturedProducts() {
-  const products = await getProducts();
-  const featured = products.filter((product) => product.featured);
-  return featured.length ? featured : products.slice(0, 3);
 }
 
 export function youtubeEmbedUrl(url: string) {
