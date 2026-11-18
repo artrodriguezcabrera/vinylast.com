@@ -1,12 +1,20 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { resourceCategories, resourceDocuments, resourceThumbnail } from "../../lib/resource-documents";
+import { getResources } from "../../lib/contentful";
 import { site } from "../../lib/site";
+import { resourceProductLines } from "../../lib/types";
 
-const groups = resourceCategories.map((category) => ({
-  ...category,
-  documents: resourceDocuments.filter((document) => document.category === category.slug),
-}));
+const resources = await getResources();
+const knownLines = new Set<string>(resourceProductLines);
+const extraLines = [
+  ...new Set(resources.map((resource) => resource.productLine).filter((line) => line && !knownLines.has(line))),
+];
+const groups = [...resourceProductLines, ...extraLines]
+  .map((name) => ({
+    name,
+    resources: resources.filter((resource) => resource.productLine === name),
+  }))
+  .filter((group) => group.resources.length > 0);
 ---
 
 <Layout
@@ -29,9 +37,9 @@ const groups = resourceCategories.map((category) => ({
           All
         </button>
         {
-          resourceCategories.map((category) => (
-            <button class="filter-btn" type="button" data-filter={category.slug} aria-pressed="false">
-              {category.name}
+          groups.map((group) => (
+            <button class="filter-btn" type="button" data-filter={group.name} aria-pressed="false">
+              {group.name}
             </button>
           ))
         }
@@ -42,33 +50,38 @@ const groups = resourceCategories.map((category) => ({
       <div id="resource-grid">
         {
           groups.map((group) => (
-            <section class="product-group" data-category={group.slug}>
+            <section class="product-group" data-category={group.name}>
               <h2>{group.name}</h2>
-              {group.documents.length === 0 ? (
-                <p class="lede">No documents in this category yet.</p>
-              ) : (
-                <div class="cards">
-                  {group.documents.map((document) => (
-                    <a class="card" href={document.file} target="_blank" rel="noopener noreferrer">
-                      <div class="card-media is-document">
-                        <img src={resourceThumbnail(document.file)} alt="" />
-                      </div>
+              <div class="cards">
+                  {group.resources.map((resource) => (
+                    <a
+                      class="card"
+                      href={resource.file?.url || `/resources/${resource.slug}`}
+                      target={resource.file ? "_blank" : undefined}
+                      rel={resource.file ? "noopener noreferrer" : undefined}
+                    >
+                      {
+                        resource.thumbnail && (
+                          <div class="card-media is-document">
+                            <img src={resource.thumbnail.url} alt={resource.thumbnail.alt} />
+                          </div>
+                        )
+                      }
                       <div class="card-body">
-                        <h3>{document.title}</h3>
+                        <h3>{resource.title}</h3>
                         <span class="card-link card-action">
                           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
                             <path d="M12 3v12"></path>
                             <path d="m7 11 5 5 5-5"></path>
                             <path d="M5 21h14"></path>
                           </svg>
-                          Download PDF
-                          <span class="visually-hidden"> (opens in a new tab)</span>
+                          {resource.file ? "Download PDF" : "View resource"}
+                          {resource.file && <span class="visually-hidden"> (opens in a new tab)</span>}
                         </span>
                       </div>
                     </a>
                   ))}
                 </div>
-              )}
             </section>
           ))
         }

@@ -1,6 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
-import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../lib/contentful";
+import { getProductBySlug, getProducts } from "../../lib/contentful";
 import { resourceThumbnail } from "../../lib/resource-documents";
 
 export async function getStaticPaths() {
@@ -19,44 +19,18 @@ if (!product) {
 }
 
 const thumbs = product.gallery.length ? product.gallery : product.hero ? [product.hero] : [];
-const mockThumb = product.hero || thumbs[0];
-const usingMockResources = product.relatedResources.length === 0;
-const hasVideos = product.videos.length > 0;
+const hasResources = product.relatedResources.length > 0;
 
-const resourceCards = usingMockResources
-  ? [
-      {
-        title: `${product.name} installation guide`,
-        href: "/contact",
-        image: mockThumb?.url,
-        external: false,
-        action: "Download PDF",
-      },
-      {
-        title: `${product.name} spec sheet`,
-        href: "/contact",
-        image: mockThumb?.url,
-        external: false,
-        action: "Download PDF",
-      },
-      {
-        title: "Vinylast limited warranty",
-        href: "/contact",
-        image: mockThumb?.url,
-        external: false,
-        action: "Download PDF",
-      },
-    ]
-  : product.relatedResources.map((resource) => {
-      const file = resource.file?.url;
-      return {
-        title: resource.title,
-        href: file || `/resources/${resource.slug}`,
-        image: resource.thumbnail?.url || (file?.startsWith("/documents/") ? resourceThumbnail(file) : undefined),
-        external: Boolean(file),
-        action: file ? "Download PDF" : "View resource",
-      };
-    });
+const resourceCards = product.relatedResources.map((resource) => {
+  const file = resource.file?.url;
+  return {
+    title: resource.title,
+    href: file || `/resources/${resource.slug}`,
+    image: resource.thumbnail?.url || (file?.startsWith("/documents/") ? resourceThumbnail(file) : undefined),
+    external: Boolean(file),
+    action: file ? "Download PDF" : "View resource",
+  };
+});
 ---
 
 <Layout
@@ -110,22 +84,10 @@ const resourceCards = usingMockResources
           }
         </div>
         <div class="product-copy">
-          <!--
-          {(product.category || product.series) && (
-            <p class="card-kicker">
-              {[product.category?.name, product.series].filter(Boolean).join(" · ")}
-            </p>
-          )}
-          -->
           <h1>{product.name}</h1>
           <p class="lede">{product.shortDescription}</p>
           <div class="btn-row" style="margin: 1.1rem 0 1.5rem">
             <a class="btn btn-primary" href="/contact">Contact us about this product</a>
-            {product.relatedResources[0]?.file && (
-              <a class="btn btn-outline" href={product.relatedResources[0].file.url}>
-                Download spec
-              </a>
-            )}
           </div>
           {
             product.features.length > 0 && (
@@ -139,11 +101,25 @@ const resourceCards = usingMockResources
               </>
             )
           }
+          {
+            product.options.length > 0 && (
+              <>
+                <h2 class="options-heading">Available options</h2>
+                <ul class="feature-list">
+                  {product.options.map((option) => (
+                    <li>{option}</li>
+                  ))}
+                </ul>
+              </>
+            )
+          }
         </div>
       </div>
     </div>
   </section>
 
+  {
+    hasResources && (
   <section class="section">
     <div class="wrap">
       <div class="product-tabs">
@@ -151,16 +127,6 @@ const resourceCards = usingMockResources
           <button type="button" role="tab" id="tab-resources" aria-controls="panel-resources" aria-selected="true">
             Resources
           </button>
-          <button type="button" role="tab" id="tab-description" aria-controls="panel-description" aria-selected="false">
-            Other Details
-          </button>
-          {
-            hasVideos && (
-              <button type="button" role="tab" id="tab-videos" aria-controls="panel-videos" aria-selected="false">
-                Videos
-              </button>
-            )
-          }
         </div>
 
         <div
@@ -169,104 +135,44 @@ const resourceCards = usingMockResources
           id="panel-resources"
           aria-labelledby="tab-resources"
         >
-          {usingMockResources && <p class="lede">Sample downloads for this demo. Live PDFs will replace these.</p>}
-          <div class="cards">
-            {
-              resourceCards.map((resource) => (
-                <a
-                  class="card"
-                  href={resource.href}
-                  target={resource.external ? "_blank" : undefined}
-                  rel={resource.external ? "noopener noreferrer" : undefined}
-                >
-                  {
-                    resource.image && (
-                      <div class="card-media is-document">
-                        <img src={resource.image} alt="" />
-                      </div>
-                    )
-                  }
-                  <div class="card-body">
-                    <h3>{resource.title}</h3>
-                    <span class="card-link card-action">
-                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
-                        <path d="M12 3v12"></path>
-                        <path d="m7 11 5 5 5-5"></path>
-                        <path d="M5 21h14"></path>
-                      </svg>
-                      {resource.action}
-                      {resource.external && <span class="visually-hidden"> (opens in a new tab)</span>}
-                    </span>
-                  </div>
-                </a>
-              ))
-            }
-          </div>
-        </div>
-
-        <div
-          class="product-tabs-panel"
-          role="tabpanel"
-          id="panel-description"
-          aria-labelledby="tab-description"
-          hidden
-        >
-          {
-            product.bodyHtml ? (
-              <div class="prose">
-                <Fragment set:html={product.bodyHtml} />
-              </div>
-            ) : (
-              !product.specs.length && <p class="lede">{product.shortDescription}</p>
-            )
-          }
-          {
-            product.specs.length > 0 && (
-              <table class="specs">
-                <tbody>
-                  {product.specs.map((spec) => (
-                    <tr>
-                      <th scope="row">{spec.name}</th>
-                      <td>{spec.value}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )
-          }
-        </div>
-
-        {
-          hasVideos && (
-            <div
-              class="product-tabs-panel"
-              role="tabpanel"
-              id="panel-videos"
-              aria-labelledby="tab-videos"
-              hidden
-            >
-              <div class="video-grid">
+              <div class="cards">
                 {
-                  product.videos.map((video) => (
-                    <div>
-                      <iframe
-                        class="video-frame"
-                        src={youtubeEmbedUrl(video.url)}
-                        title={video.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                      />
-                      <p style="margin-top: 0.5rem">{video.title}</p>
-                    </div>
+                  resourceCards.map((resource) => (
+                    <a
+                      class="card"
+                      href={resource.href}
+                      target={resource.external ? "_blank" : undefined}
+                      rel={resource.external ? "noopener noreferrer" : undefined}
+                    >
+                      {
+                        resource.image && (
+                          <div class="card-media is-document">
+                            <img src={resource.image} alt="" />
+                          </div>
+                        )
+                      }
+                      <div class="card-body">
+                        <h3>{resource.title}</h3>
+                        <span class="card-link card-action">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" aria-hidden="true">
+                            <path d="M12 3v12"></path>
+                            <path d="m7 11 5 5 5-5"></path>
+                            <path d="M5 21h14"></path>
+                          </svg>
+                          {resource.action}
+                          {resource.external && <span class="visually-hidden"> (opens in a new tab)</span>}
+                        </span>
+                      </div>
+                    </a>
                   ))
                 }
               </div>
-            </div>
-          )
-        }
+        </div>
       </div>
     </div>
   </section>
+    )
+  }
 </Layout>
 
 <script>

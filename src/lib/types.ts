@@ -24,6 +24,18 @@ export const resourceTypeLabels: Record<ResourceType, string> = {
   other: "Other",
 };
 
+export const resourceProductLines = [
+  "Accessories",
+  "Aluminum Fencing",
+  "Aluminum Railing",
+  "Pergola",
+  "Resource Information",
+  "Vinyl Fencing",
+  "Vinyl Railing",
+  "Warranty & Maintenance",
+  "Window & Door",
+] as const;
+
 export type AssetImage = {
   url: string;
   alt: string;
@@ -44,31 +56,16 @@ export type Category = {
   image?: AssetImage;
 };
 
-export type Spec = {
-  name: string;
-  value: string;
-};
-
-export type Video = {
-  title: string;
-  url: string;
-};
-
-export type RelatedProduct = {
-  name: string;
-  slug: string;
-};
-
 export type Resource = {
   id: string;
   title: string;
   slug: string;
   type: ResourceType;
+  productLine: string;
   thumbnail?: AssetImage;
   file?: AssetFile;
   videoUrl?: string;
   shortDescription: string;
-  relatedProducts: RelatedProduct[];
 };
 
 export type Product = {
@@ -76,16 +73,12 @@ export type Product = {
   name: string;
   slug: string;
   category?: Category;
-  series?: string;
   shortDescription: string;
-  bodyHtml?: string;
   hero?: AssetImage;
   gallery: AssetImage[];
   features: string[];
-  specs: Spec[];
-  videos: Video[];
+  options: string[];
   relatedResources: Resource[];
-  featured: boolean;
 };
 
 export type Catalog = {

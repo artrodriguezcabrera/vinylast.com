@@ -1,5 +1,3 @@
-import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
-import type { Document } from "@contentful/rich-text-types";
 import { createClient, type Entry, type EntrySkeletonType } from "contentful";
 import {
   fallbackCategories,
@@ -14,8 +12,6 @@ import type {
   Product,
   Resource,
   ResourceType,
-  Spec,
-  Video,
 } from "./types";
 
 type AssetFields = {
@@ -38,27 +34,23 @@ type ProductFields = {
   name: string;
   slug: string;
   category?: Entry | unknown;
-  series?: string;
   shortDescription?: string;
-  body?: Document;
   hero?: unknown;
   gallery?: unknown[];
   features?: string[];
-  specs?: unknown;
-  videos?: unknown;
+  options?: string[];
   relatedResources?: unknown[];
-  featured?: boolean;
 };
 
 type ResourceFields = {
   title: string;
   slug: string;
   type?: string;
+  productLine?: string;
   thumbnail?: unknown;
   file?: unknown;
   videoUrl?: string;
   shortDescription?: string;
-  relatedProducts?: unknown[];
 };
 
 function env(name: "CONTENTFUL_SPACE_ID" | "CONTENTFUL_DELIVERY_TOKEN") {
@@ -128,62 +120,6 @@ function readFile(value: unknown, fallbackTitle = ""): AssetFile | undefined {
   return undefined;
 }
 
-function parseSpecs(value: unknown): Spec[] {
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => {
-        if (typeof item === "string") {
-          const [name, ...rest] = item.split(":");
-          return { name: name.trim(), value: rest.join(":").trim() };
-        }
-        const rec = asRecord(item);
-        if (!rec) return null;
-        const name = String(rec.name ?? rec.label ?? "").trim();
-        const specValue = String(rec.value ?? "").trim();
-        return name && specValue ? { name, value: specValue } : null;
-      })
-      .filter((item): item is Spec => Boolean(item?.name && item.value));
-  }
-  if (typeof value === "string") {
-    return value
-      .split("\n")
-      .map((line) => {
-        const [name, ...rest] = line.split(":");
-        return { name: name.trim(), value: rest.join(":").trim() };
-      })
-      .filter((item) => item.name && item.value);
-  }
-  return [];
-}
-
-function parseVideos(value: unknown): Video[] {
-  if (Array.isArray(value)) {
-    return value
-      .map((item) => {
-        if (typeof item === "string") {
-          const [title, url] = item.split("|").map((part) => part.trim());
-          return title && url ? { title, url } : null;
-        }
-        const rec = asRecord(item);
-        if (!rec) return null;
-        const title = String(rec.title ?? "").trim();
-        const url = String(rec.url ?? rec.videoUrl ?? "").trim();
-        return title && url ? { title, url } : null;
-      })
-      .filter((item): item is Video => Boolean(item));
-  }
-  if (typeof value === "string") {
-    return value
-      .split("\n")
-      .map((line) => {
-        const [title, url] = line.split("|").map((part) => part.trim());
-        return title && url ? { title, url } : null;
-      })
-      .filter((item): item is Video => Boolean(item));
-  }
-  return [];
-}
-
 function asResourceType(value?: string): ResourceType {
   const allowed: ResourceType[] = [
     "install",
@@ -215,11 +151,11 @@ function mapResourceLite(entry: Entry<EntrySkeletonType>): Resource | undefined 
     title: fields.title,
     slug: fields.slug,
     type: asResourceType(fields.type),
+    productLine: fields.productLine || "",
     thumbnail: readImage(fields.thumbnail, fields.title),
     file: readFile(fields.file, fields.title),
     videoUrl: fields.videoUrl,
     shortDescription: fields.shortDescription || "",
-    relatedProducts: [],
   };
 }
 
@@ -243,33 +179,13 @@ function mapProduct(entry: Entry<EntrySkeletonType>): Product | undefined {
     name: fields.name,
     slug: fields.slug,
     category: categoryEntry?.fields ? mapCategory(categoryEntry) : undefined,
-    series: fields.series,
     shortDescription: fields.shortDescription || "",
-    bodyHtml: fields.body ? documentToHtmlString(fields.body) : undefined,
     hero: readImage(fields.hero, fields.name) || gallery[0],
     gallery,
     features: Array.isArray(fields.features) ? fields.features.filter(Boolean) : [],
-    specs: parseSpecs(fields.specs),
-    videos: parseVideos(fields.videos),
+    options: Array.isArray(fields.options) ? fields.options.filter(Boolean) : [],
     relatedResources: related,
-    featured: Boolean(fields.featured),
   };
-}
-
-function mapResource(entry: Entry<EntrySkeletonType>): Resource | undefined {
-  const base = mapResourceLite(entry);
-  if (!base) return undefined;
-  const fields = entry.fields as unknown as ResourceFields;
-  const related = Array.isArray(fields.relatedProducts)
-    ? (fields.relatedProducts as Entry<EntrySkeletonType>[])
-        .map((product) => {
-          const productFields = product.fields as unknown as ProductFields | undefined;
-          if (!productFields?.name || !productFields.slug) return null;
-          return { name: productFields.name, slug: productFields.slug };
-        })
-        .filter((item): item is { name: string; slug: string } => Boolean(item))
-    : [];
-  return { ...base, relatedProducts: related };
 }
 
 let cached: Catalog | null = null;
@@ -298,7 +214,7 @@ export async function getCatalog(): Promise<Catalog> {
     .map((item) => mapProduct(item as Entry<EntrySkeletonType>))
     .filter((item): item is Product => Boolean(item));
   const resources = resourceRes.items
-    .map((item) => mapResource(item as Entry<EntrySkeletonType>))
+    .map((item) => mapResourceLite(item as Entry<EntrySkeletonType>))
     .filter((item): item is Resource => Boolean(item));
   const categories = categoryRes.items
     .map((item) => mapCategory(item as Entry<EntrySkeletonType>))
@@ -332,12 +248,6 @@ export async function getProductBySlug(slug: string) {
 
 export async function getResourceBySlug(slug: string) {
   return (await getResources()).find((resource) => resource.slug === slug);
-}
-
-export async function getFeaturedProducts() {
-  const products = await getProducts();
-  const featured = products.filter((product) => product.featured);
-  return featured.length ? featured : products.slice(0, 3);
 }
 
 export function youtubeEmbedUrl(url: string) {

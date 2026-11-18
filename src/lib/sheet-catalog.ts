@@ -1,5 +1,5 @@
 import { productGalleries } from "./product-images";
-import type { Category, Product, Spec } from "./types";
+import type { Category, Product } from "./types";
 
 export const catVinylRailing: Category = {
   id: "cat-vinyl-railing",
@@ -51,33 +51,22 @@ function product(input: {
   slug: string;
   name: string;
   category: Category;
-  series: string;
   shortDescription: string;
   features: string[];
-  specs?: Spec[];
-  infill?: string;
-  featured?: boolean;
-  extraHtml?: string;
+  options?: string[];
 }): Product {
-  const specs = [...(input.specs || [])];
-  if (input.infill) specs.push({ name: "Infill options", value: input.infill });
-  specs.push({ name: "Series", value: input.series });
   const gallery = productGalleries[input.slug] || [];
   return {
     id: `prod-${input.slug}`,
     name: input.name,
     slug: input.slug,
     category: input.category,
-    series: input.series,
     shortDescription: input.shortDescription,
-    bodyHtml: input.extraHtml,
     hero: gallery[0],
     gallery,
     features: input.features,
-    specs,
-    videos: [],
+    options: input.options || [],
     relatedResources: [],
-    featured: Boolean(input.featured),
   };
 }
 
@@ -86,8 +75,6 @@ export const sheetProducts: Product[] = [
     slug: "t-rail",
     name: "T-Rail",
     category: catVinylRailing,
-    series: "Vinyl",
-    featured: true,
     shortDescription:
       "Our most popular vinyl railing. Classic, simple, and high performance at a budget-friendly cost that fits most homes.",
     features: [
@@ -101,14 +88,11 @@ export const sheetProducts: Product[] = [
       "Colors: White and limited special-order colors",
       "Top rail 3.5\" × 3.5\"; bottom rail 2\" × 3.5\"",
     ],
-    infill:
-      "Vinyl 1-3/8\" square baluster; glass slats; black aluminum 3/4\" round or square; horizontal baluster in black and anodized",
   }),
   product({
     slug: "palisade",
     name: "Palisade",
     category: catVinylRailing,
-    series: "Vinyl",
     shortDescription:
       "Contoured-top vinyl railing that blends contemporary and classic looks, with infill options for almost any design.",
     features: [
@@ -122,14 +106,11 @@ export const sheetProducts: Product[] = [
       "Colors: White and limited special-order colors",
       "Top rail 3\" × 2.5\"; bottom rail 2\" × 3.5\"",
     ],
-    infill:
-      "Vinyl 1-3/8\" square baluster; glass slats; black aluminum 3/4\" round or square; horizontal baluster in black and anodized",
   }),
   product({
     slug: "2-box",
     name: "2-Box",
     category: catVinylRailing,
-    series: "Vinyl",
     shortDescription:
       "Smooth, modern vinyl railing — budget-friendly, with enough customization to finish an outdoor space cleanly.",
     features: [
@@ -143,14 +124,11 @@ export const sheetProducts: Product[] = [
       "Colors: White and limited special-order colors",
       "Top rail 2\" × 3.5\"; bottom rail 2\" × 3.5\"",
     ],
-    infill:
-      "Vinyl 1-3/8\" square baluster; glass slats; black aluminum 3/4\" round or square; horizontal baluster in black and anodized",
   }),
   product({
     slug: "3000-series",
     name: "3000 Series",
     category: catVinylRailing,
-    series: "Vinyl",
     shortDescription:
       "Contemporary vinyl railing for medium to large areas — 10 infill choices and 4 colors. Superior special order.",
     features: [
@@ -163,14 +141,11 @@ export const sheetProducts: Product[] = [
       "Colors: White, Clay, Almond, and Black",
       "Top rail 3\" × 3.5\"; bottom rail 2\" × 3.5\"",
     ],
-    specs: [{ name: "Availability", value: "Superior special order — ask the office" }],
-    infill: "Vinyl 1.3\" square plus two turned baluster designs; black aluminum 3/4\" round or square",
   }),
   product({
     slug: "5000-series",
     name: "5000 Series",
     category: catVinylRailing,
-    series: "Vinyl",
     shortDescription:
       "Substantial vinyl railing for estates, country clubs, and large commercial properties. Superior special order.",
     features: [
@@ -183,15 +158,11 @@ export const sheetProducts: Product[] = [
       "Colors: White, Clay, Almond, and Black",
       "4-1/4\" × 3.5\" top and bottom rails",
     ],
-    specs: [{ name: "Availability", value: "Superior special order — ask the office" }],
-    infill: "Vinyl 2-5/8\" turned baluster designs",
   }),
   product({
     slug: "montego",
     name: "Montego",
     category: catFencing,
-    series: "Open picket",
-    featured: true,
     shortDescription:
       "Neighbor-friendly open picket fence — pickets run through the top rail and sit in the bottom rail, same look from both sides.",
     features: [
@@ -209,7 +180,6 @@ export const sheetProducts: Product[] = [
     slug: "keylargo",
     name: "Keylargo",
     category: catFencing,
-    series: "Closed picket",
     shortDescription:
       "Simple rails with picket spacing you can open up for a breezy look or tighten for a more secure yard or pool fence.",
     features: [
@@ -227,7 +197,6 @@ export const sheetProducts: Product[] = [
     slug: "difinity",
     name: "Difinity",
     category: catFencing,
-    series: "Solid privacy",
     shortDescription:
       "Privacy fence with deco-style rails and tongue-and-groove panels that slide together for a fast, strong install. Lattice or picket tops optional.",
     features: [
@@ -245,7 +214,6 @@ export const sheetProducts: Product[] = [
     slug: "ranch-rail",
     name: "Ranch Rail",
     category: catFencing,
-    series: "Post and rail",
     shortDescription:
       "2-, 3-, or 4-rail post-and-rail fence for property lines, yards, and farms — a rustic, welcoming look.",
     features: [
@@ -262,7 +230,6 @@ export const sheetProducts: Product[] = [
     slug: "two-tone",
     name: "Two-Tone",
     category: catFencing,
-    series: "Two-tone",
     shortDescription:
       "Mix rail, post, and panel colors for a custom fence. TitanShield helps protect against sun and weather.",
     features: [
@@ -279,8 +246,6 @@ export const sheetProducts: Product[] = [
     slug: "pergola",
     name: "Pergola",
     category: catPergolaShower,
-    series: "Vinyl",
-    featured: true,
     shortDescription:
       "Aluminum-reinforced vinyl pergolas that add outdoor living space — open but sheltered, built for snow load and weather, with little maintenance beyond cleaning.",
     features: [
@@ -296,7 +261,6 @@ export const sheetProducts: Product[] = [
     slug: "outdoor-shower-enclosure",
     name: "Outdoor shower enclosure",
     category: catPergolaShower,
-    series: "Vinyl",
     shortDescription:
       "Custom vinyl outdoor shower enclosures for pools, beach houses, and rinse-off at the back door — sized and roofed to the job.",
     features: [
@@ -311,8 +275,6 @@ export const sheetProducts: Product[] = [
     slug: "ada-railing",
     name: "ADA railing",
     category: catAccessories,
-    series: "Vinyl",
-    featured: true,
     shortDescription:
       "A smooth, continuous, graspable handrail for deck and porch stairs — tested and code-compliant with the rail systems it attaches to.",
     features: [
@@ -329,7 +291,6 @@ export const sheetProducts: Product[] = [
     slug: "deck-gates",
     name: "Deck gates",
     category: catAccessories,
-    series: "Vinyl",
     shortDescription:
       "Welded, custom-fit deck gates to keep kids and pets where they belong — hardware included, matched to the rail system.",
     features: [
@@ -345,7 +306,6 @@ export const sheetProducts: Product[] = [
     slug: "porch-post",
     name: "Porch post",
     category: catAccessories,
-    series: "Vinyl",
     shortDescription:
       "Structural vinyl porch posts with full-length aluminum inserts for porch and roof overhangs — several styles and sizes to match the rail.",
     features: [
@@ -360,7 +320,6 @@ export const sheetProducts: Product[] = [
     slug: "columns",
     name: "Columns",
     category: catAccessories,
-    series: "Vinyl",
     shortDescription:
       "Straight, round, tapered, or square structural columns with full-length aluminum inserts supporting up to 18,000 pounds.",
     features: [
@@ -377,7 +336,6 @@ export const sheetProducts: Product[] = [
     slug: "post-mount",
     name: "Post Mount",
     category: catAccessories,
-    series: "Structural",
     shortDescription:
       "CCRR-certified guardpost bracket. Replace a wood guard post on wood decks, porches, or concrete — 36\" and 42\" railing heights.",
     features: [
@@ -394,7 +352,6 @@ export const sheetProducts: Product[] = [
     slug: "newel-post-and-post-wraps",
     name: "Newel post and post wraps",
     category: catAccessories,
-    series: "Vinyl",
     shortDescription:
       "Square or turned newels, plus 4-piece snap-together wraps to cover wood posts in vinyl that matches the rail.",
     features: [
@@ -409,16 +366,13 @@ export const sheetProducts: Product[] = [
     slug: "harvey-windows-and-doors",
     name: "Harvey windows and doors",
     category: catWindows,
-    series: "Vinyl",
     shortDescription:
       "Vinylast has distributed the full Harvey window and door line for more than 30 years — new construction and replacement, built for Northeast weather.",
-    extraHtml: `<p>Since 1961 Harvey has helped customers and builders deliver for homeowners. Products are built for tough northern winters and hot summers. For the full line, see <a href="https://harveywindows.com/">harveywindows.com</a>.</p>`,
     features: [
       "Full line of new-construction and replacement windows and doors",
       "Many styles and colors",
       "Energy-efficient glass options and grid patterns",
       "Styles include bays, bows, sliders, single hung, double hung, casements, awnings, and more",
     ],
-    specs: [{ name: "Manufacturer", value: "Harvey — harveywindows.com" }],
   }),
 ];

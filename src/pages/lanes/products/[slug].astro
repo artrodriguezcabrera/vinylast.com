@@ -3,7 +3,7 @@ import LanesLayout from "../../../layouts/LanesLayout.astro";
 import LanesPageHero from "../../../components/lanes/LanesPageHero.astro";
 import LanesProductCard from "../../../components/lanes/LanesProductCard.astro";
 import LanesResourceCard from "../../../components/lanes/LanesResourceCard.astro";
-import { getProductBySlug, getProducts, youtubeEmbedUrl } from "../../../lib/contentful";
+import { getProductBySlug, getProducts } from "../../../lib/contentful";
 import { lanesHref } from "../../../lib/lanes";
 
 export async function getStaticPaths() {
@@ -100,6 +100,18 @@ const relatedFallback =
                       </ul>
                     )
                   }
+                  {
+                    product.options.length > 0 && (
+                      <>
+                        <h5 class="heading heading-h5 options-heading">Available options</h5>
+                        <ul class="feature-list">
+                          {product.options.map((option) => (
+                            <li>{option}</li>
+                          ))}
+                        </ul>
+                      </>
+                    )
+                  }
                   <div class="product-meta mt--30">
                     {
                       product.category && (
@@ -116,11 +128,6 @@ const relatedFallback =
                   </div>
                   <div class="lanes-cta mt--30">
                     <a href={lanesHref("/contact")}>Contact us about this product</a>
-                    {product.relatedResources[0]?.file && (
-                      <a class="is-outline" href={product.relatedResources[0].file.url}>
-                        Download spec
-                      </a>
-                    )}
                   </div>
                 </div>
               </div>
@@ -138,75 +145,18 @@ const relatedFallback =
               <a class="active" id="descrip-tab" data-bs-toggle="tab" href="#descrip" role="tab" aria-controls="descrip" aria-selected="true">
                 Description
               </a>
-              {
-                product.specs.length > 0 && (
-                  <a id="specs-tab" data-bs-toggle="tab" href="#specs" role="tab" aria-controls="specs" aria-selected="false">
-                    Specs
-                  </a>
-                )
-              }
             </div>
           </div>
         </div>
         <div class="tab_container">
           <div class="single_review_content tab-pane fade show active" id="descrip" role="tabpanel">
             <div class="content">
-              {
-                product.bodyHtml ? (
-                  <Fragment set:html={product.bodyHtml} />
-                ) : (
-                  <p>{product.shortDescription}</p>
-                )
-              }
+              <p>{product.shortDescription}</p>
             </div>
           </div>
-          {
-            product.specs.length > 0 && (
-              <div class="single_review_content tab-pane fade" id="specs" role="tabpanel">
-                <div class="content">
-                  <table class="specs-table">
-                    <tbody>
-                      {product.specs.map((spec) => (
-                        <tr>
-                          <th scope="row">{spec.name}</th>
-                          <td>{spec.value}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )
-          }
         </div>
       </div>
     </div>
-
-    {
-      product.videos.length > 0 && (
-        <div class="feature-product-area bg-color pb--80" data-bg-color="#fff">
-          <div class="container">
-            <div class="section-title text-center">
-              <h2 class="title">Installation videos</h2>
-            </div>
-            <div class="row mt--20">
-              {product.videos.map((video) => (
-                <div class="col-lg-6 mt--30">
-                  <iframe
-                    class="video-frame"
-                    src={youtubeEmbedUrl(video.url)}
-                    title={video.title}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
-                  />
-                  <p class="mt--10">{video.title}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )
-    }
 
     {
       product.relatedResources.length > 0 && (

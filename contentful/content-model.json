@@ -43,14 +43,12 @@
           "linkType": "Entry",
           "validations": [{ "linkContentType": ["category"] }]
         },
-        { "id": "series", "name": "Series", "type": "Symbol" },
         {
           "id": "shortDescription",
           "name": "Short description",
           "type": "Text",
           "required": true
         },
-        { "id": "body", "name": "Body", "type": "RichText" },
         {
           "id": "hero",
           "name": "Hero image",
@@ -70,16 +68,10 @@
           "items": { "type": "Symbol" }
         },
         {
-          "id": "specs",
-          "name": "Specs",
-          "type": "Text",
-          "helpText": "One per line: Label: Value"
-        },
-        {
-          "id": "videos",
-          "name": "Videos",
-          "type": "Text",
-          "helpText": "One per line: Title | https://youtube.com/watch?v=..."
+          "id": "options",
+          "name": "Available options",
+          "type": "Array",
+          "items": { "type": "Symbol" }
         },
         {
           "id": "relatedResources",
@@ -90,8 +82,7 @@
             "linkType": "Entry",
             "validations": [{ "linkContentType": ["resource"] }]
           }
-        },
-        { "id": "featured", "name": "Featured on home", "type": "Boolean" }
+        }
       ]
     },
     {
@@ -106,6 +97,27 @@
           "type": "Symbol",
           "required": true,
           "validations": [{ "unique": true }]
+        },
+        {
+          "id": "productLine",
+          "name": "Product line",
+          "type": "Symbol",
+          "required": true,
+          "validations": [
+            {
+              "in": [
+                "Accessories",
+                "Aluminum Fencing",
+                "Aluminum Railing",
+                "Pergola",
+                "Resource Information",
+                "Vinyl Fencing",
+                "Vinyl Railing",
+                "Warranty & Maintenance",
+                "Window & Door"
+              ]
+            }
+          ]
         },
         {
           "id": "type",
@@ -135,16 +147,6 @@
           "id": "shortDescription",
           "name": "Short description",
           "type": "Text"
-        },
-        {
-          "id": "relatedProducts",
-          "name": "Related products",
-          "type": "Array",
-          "items": {
-            "type": "Link",
-            "linkType": "Entry",
-            "validations": [{ "linkContentType": ["product"] }]
-          }
         }
       ]
     }

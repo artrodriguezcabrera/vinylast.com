@@ -32,10 +32,7 @@ const href = lanesHref(`/products/${product.slug}`);
   <div class="content">
     {
       product.category && (
-        <span class="kicker">
-          {product.category.name}
-          {product.series ? ` · ${product.series}` : ""}
-        </span>
+        <span class="kicker">{product.category.name}</span>
       )
     }
     <h2><a href={href}>{product.name}</a></h2>
