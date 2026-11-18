@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { getProductBySlug, getProducts } from "../../lib/contentful";
+import { markdownParagraphs, markdownToPlainText } from "../../lib/inline-markdown";
 import { resourceThumbnail } from "../../lib/resource-documents";
 
 export async function getStaticPaths() {
@@ -35,7 +36,7 @@ const resourceCards = product.relatedResources.map((resource) => {
 
 <Layout
   title={product.name}
-  description={product.shortDescription || `${product.name} from Vinylast Inc.`}
+  description={markdownToPlainText(product.shortDescription) || `${product.name} from Vinylast Inc.`}
   currentPath={`/products/${product.slug}`}
 >
   <section class="section">
@@ -85,7 +86,11 @@ const resourceCards = product.relatedResources.map((resource) => {
         </div>
         <div class="product-copy">
           <h1>{product.name}</h1>
-          <p class="lede">{product.shortDescription}</p>
+          {
+            markdownParagraphs(product.shortDescription).map((html) => (
+              <p class="lede" set:html={html} />
+            ))
+          }
           <div class="btn-row" style="margin: 1.1rem 0 1.5rem">
             <a class="btn btn-primary" href="/contact">Contact us about this product</a>
           </div>

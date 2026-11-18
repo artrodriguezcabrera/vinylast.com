@@ -4,6 +4,7 @@ import LanesPageHero from "../../../components/lanes/LanesPageHero.astro";
 import LanesProductCard from "../../../components/lanes/LanesProductCard.astro";
 import LanesResourceCard from "../../../components/lanes/LanesResourceCard.astro";
 import { getProductBySlug, getProducts } from "../../../lib/contentful";
+import { markdownParagraphs, markdownToPlainText } from "../../../lib/inline-markdown";
 import { lanesHref } from "../../../lib/lanes";
 
 export async function getStaticPaths() {
@@ -34,7 +35,7 @@ const relatedFallback =
 
 <LanesLayout
   title={product.name}
-  description={product.shortDescription || `${product.name} from Vinylast Inc.`}
+  description={markdownToPlainText(product.shortDescription) || `${product.name} from Vinylast Inc.`}
   currentPath={lanesHref(`/products/${product.slug}`)}
 >
   <LanesPageHero title={product.name} image={thumbs[0]?.url} />
@@ -89,7 +90,11 @@ const relatedFallback =
                     <h4 class="heading heading-h4">{product.name}</h4>
                   </div>
                   <div class="description">
-                    <p class="bk_pra">{product.shortDescription}</p>
+                    {
+                      markdownParagraphs(product.shortDescription).map((html) => (
+                        <p class="bk_pra" set:html={html} />
+                      ))
+                    }
                   </div>
                   {
                     product.features.length > 0 && (
@@ -151,7 +156,11 @@ const relatedFallback =
         <div class="tab_container">
           <div class="single_review_content tab-pane fade show active" id="descrip" role="tabpanel">
             <div class="content">
-              <p>{product.shortDescription}</p>
+              {
+                markdownParagraphs(product.shortDescription).map((html) => (
+                  <p set:html={html} />
+                ))
+              }
             </div>
           </div>
         </div>
