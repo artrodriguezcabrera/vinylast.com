@@ -8,16 +8,19 @@ const products = await getProducts();
 const categories = (await getCategories()).filter((category) =>
   products.some((product) => product.category?.slug === category.slug),
 );
+function byName(a: { name: string }, b: { name: string }) {
+  return a.name.localeCompare(b.name, "en", { sensitivity: "base" });
+}
 const productGroups = [
   ...categories.map((category) => ({
     name: category.name,
     slug: category.slug,
-    products: products.filter((product) => product.category?.slug === category.slug),
+    products: products.filter((product) => product.category?.slug === category.slug).sort(byName),
   })),
   {
     name: "Other",
     slug: "other",
-    products: products.filter((product) => !product.category),
+    products: products.filter((product) => !product.category).sort(byName),
   },
 ].filter((group) => group.products.length > 0);
 ---

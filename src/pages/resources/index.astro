@@ -9,10 +9,13 @@ const knownLines = new Set<string>(resourceProductLines);
 const extraLines = [
   ...new Set(resources.map((resource) => resource.productLine).filter((line) => line && !knownLines.has(line))),
 ];
+function byTitle(a: { title: string }, b: { title: string }) {
+  return a.title.localeCompare(b.title, "en", { sensitivity: "base" });
+}
 const groups = [...resourceProductLines, ...extraLines]
   .map((name) => ({
     name,
-    resources: resources.filter((resource) => resource.productLine === name),
+    resources: resources.filter((resource) => resource.productLine === name).sort(byTitle),
   }))
   .filter((group) => group.resources.length > 0);
 ---

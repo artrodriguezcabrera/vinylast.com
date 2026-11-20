@@ -140,6 +140,7 @@ function mapCategory(entry: Entry<EntrySkeletonType>): Category | undefined {
     name: fields.name,
     slug: fields.slug,
     image: readImage(fields.image, fields.name),
+    createdAt: entry.sys.createdAt,
   };
 }
 
@@ -207,7 +208,7 @@ export async function getCatalog(): Promise<Catalog> {
   const [productRes, resourceRes, categoryRes] = await Promise.all([
     client.getEntries({ content_type: "product", include: 2, limit: 200 }),
     client.getEntries({ content_type: "resource", include: 2, limit: 200 }),
-    client.getEntries({ content_type: "category", include: 1, limit: 50 }),
+    client.getEntries({ content_type: "category", include: 1, limit: 50, order: ["sys.createdAt"] }),
   ]);
 
   const products = productRes.items
@@ -239,7 +240,10 @@ export async function getCategories() {
   for (const product of products) {
     if (product.category) used.set(product.category.slug, product.category);
   }
-  return [...used.values()];
+  return [...used.values()].sort((a, b) => {
+    if (!a.createdAt || !b.createdAt) return 0;
+    return a.createdAt.localeCompare(b.createdAt);
+  });
 }
 
 export async function getProductBySlug(slug: string) {

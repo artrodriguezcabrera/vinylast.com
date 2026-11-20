@@ -54,6 +54,7 @@ export type Category = {
   name: string;
   slug: string;
   image?: AssetImage;
+  createdAt?: string;
 };
 
 export type Resource = {
