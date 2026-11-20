@@ -1,14 +1,13 @@
-function push(payload: Record<string, string>) {
+function gtag(command: "event", name: string, params: Record<string, string>) {
   window.dataLayer = window.dataLayer || [];
-  window.dataLayer.push(payload);
+  window.dataLayer.push(arguments);
 }
 
 function trackClick(el: HTMLElement) {
   const kind = el.dataset.analytics;
 
   if (kind === "product_click") {
-    push({
-      event: "product_click",
+    gtag("event", "product_click", {
       product_name: el.dataset.productName || "",
       product_slug: el.dataset.productSlug || "",
       product_category: el.dataset.productCategory || "",
@@ -17,8 +16,7 @@ function trackClick(el: HTMLElement) {
   }
 
   if (kind === "filter_select") {
-    push({
-      event: "filter_select",
+    gtag("event", "filter_select", {
       filter_context: el.dataset.filterContext || "",
       filter_label: el.dataset.filterLabel || el.textContent?.trim() || "",
       filter_value: el.dataset.filterValue || el.dataset.filter || "",
@@ -27,8 +25,7 @@ function trackClick(el: HTMLElement) {
   }
 
   if (kind === "resource_click") {
-    push({
-      event: "resource_click",
+    gtag("event", "resource_click", {
       resource_title: el.dataset.resourceTitle || "",
       resource_action: el.dataset.resourceAction || "view",
       resource_group: el.dataset.resourceGroup || "",
@@ -50,7 +47,10 @@ function trackContactForm() {
   form.addEventListener("focusin", () => {
     if (started) return;
     started = true;
-    push({ event: "contact_form_start", form_name: "contact", product_name: productField?.value || "" });
+    gtag("event", "contact_form_start", {
+      form_name: "contact",
+      product_name: productField?.value || "",
+    });
   });
 
   form.addEventListener("submit", () => {
@@ -77,8 +77,7 @@ function trackContactSuccess() {
     productName = "";
   }
 
-  push({
-    event: "contact_form_submit",
+  gtag("event", "contact_form_submit", {
     form_name: "contact",
     product_name: productName,
   });

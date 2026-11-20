@@ -10,5 +10,5 @@ interface ImportMeta {
 }
 
 interface Window {
-  dataLayer?: Record<string, unknown>[];
+  dataLayer?: unknown[];
 }
