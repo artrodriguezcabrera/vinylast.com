@@ -10,7 +10,14 @@ interface Props {
 const { name, slug, image } = Astro.props;
 ---
 
-<a class="card card-product" href={`/products?category=${slug}`}>
+<a
+  class="card card-product"
+  href={`/products?category=${slug}`}
+  data-analytics="filter_select"
+  data-filter-context="home"
+  data-filter-label={name}
+  data-filter-value={slug}
+>
   <div class:list={["card-media", { "is-placeholder": !image }]}>
     {
       image ? (

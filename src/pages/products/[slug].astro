@@ -30,6 +30,8 @@ const resourceCards = product.relatedResources.map((resource) => {
     image: resource.thumbnail?.url || (file?.startsWith("/documents/") ? resourceThumbnail(file) : undefined),
     external: Boolean(file),
     action: file ? "Download PDF" : "View resource",
+    type: resource.type || "",
+    group: resource.productLine || "",
   };
 });
 ---
@@ -92,7 +94,9 @@ const resourceCards = product.relatedResources.map((resource) => {
             ))
           }
           <div class="btn-row" style="margin: 1.1rem 0 1.5rem">
-            <a class="btn btn-primary" href="/contact">Contact us about this product</a>
+            <a class="btn btn-primary" href={`/contact?product=${encodeURIComponent(product.name)}`}>
+              Contact us about this product
+            </a>
           </div>
           {
             product.features.length > 0 && (
@@ -148,6 +152,11 @@ const resourceCards = product.relatedResources.map((resource) => {
                       href={resource.href}
                       target={resource.external ? "_blank" : undefined}
                       rel={resource.external ? "noopener noreferrer" : undefined}
+                      data-analytics="resource_click"
+                      data-resource-title={resource.title}
+                      data-resource-action={resource.external ? "download" : "view"}
+                      data-resource-group={resource.group}
+                      data-resource-type={resource.type}
                     >
                       {
                         resource.image && (

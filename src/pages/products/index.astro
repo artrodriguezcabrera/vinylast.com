@@ -50,11 +50,27 @@ const productGroups = [
           <>
             {categories.length > 1 && (
               <div class="filters" role="toolbar" aria-label="Filter products">
-                <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">
+                <button
+                  class="filter-btn"
+                  type="button"
+                  data-filter="all"
+                  data-analytics="filter_select"
+                  data-filter-context="products"
+                  data-filter-label="All"
+                  aria-pressed="true"
+                >
                   All
                 </button>
                 {categories.map((category) => (
-                  <button class="filter-btn" type="button" data-filter={category.slug} aria-pressed="false">
+                  <button
+                    class="filter-btn"
+                    type="button"
+                    data-filter={category.slug}
+                    data-analytics="filter_select"
+                    data-filter-context="products"
+                    data-filter-label={category.name}
+                    aria-pressed="false"
+                  >
                     {category.name}
                   </button>
                 ))}

@@ -8,7 +8,15 @@ interface Props {
 const { product } = Astro.props;
 ---
 
-<a class="card card-product" href={`/products/${product.slug}`} data-category={product.category?.slug || "all"}>
+<a
+  class="card card-product"
+  href={`/products/${product.slug}`}
+  data-category={product.category?.slug || "all"}
+  data-analytics="product_click"
+  data-product-name={product.name}
+  data-product-slug={product.slug}
+  data-product-category={product.category?.name || ""}
+>
   <div class:list={["card-media", { "is-placeholder": !product.hero }]}>
     {
       product.hero ? (

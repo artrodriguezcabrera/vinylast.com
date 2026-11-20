@@ -36,17 +36,41 @@ const groups = [...resourceProductLines, ...extraLines]
   <section class="section">
     <div class="wrap">
       <div class="filters" role="toolbar" aria-label="Filter resources">
-        <button class="filter-btn" type="button" data-filter="all" aria-pressed="true">
+        <button
+          class="filter-btn"
+          type="button"
+          data-filter="all"
+          data-analytics="filter_select"
+          data-filter-context="resources"
+          data-filter-label="All"
+          aria-pressed="true"
+        >
           All
         </button>
         {
           groups.map((group) => (
-            <button class="filter-btn" type="button" data-filter={group.name} aria-pressed="false">
+            <button
+              class="filter-btn"
+              type="button"
+              data-filter={group.name}
+              data-analytics="filter_select"
+              data-filter-context="resources"
+              data-filter-label={group.name}
+              aria-pressed="false"
+            >
               {group.name}
             </button>
           ))
         }
-        <button class="filter-btn" type="button" data-filter="testing-reports" aria-pressed="false">
+        <button
+          class="filter-btn"
+          type="button"
+          data-filter="testing-reports"
+          data-analytics="filter_select"
+          data-filter-context="resources"
+          data-filter-label="Testing Reports"
+          aria-pressed="false"
+        >
           Testing Reports
         </button>
       </div>
@@ -62,6 +86,11 @@ const groups = [...resourceProductLines, ...extraLines]
                       href={resource.file?.url || `/resources/${resource.slug}`}
                       target={resource.file ? "_blank" : undefined}
                       rel={resource.file ? "noopener noreferrer" : undefined}
+                      data-analytics="resource_click"
+                      data-resource-title={resource.title}
+                      data-resource-action={resource.file ? "download" : "view"}
+                      data-resource-group={group.name}
+                      data-resource-type={resource.type || ""}
                     >
                       {
                         resource.thumbnail && (

@@ -44,7 +44,16 @@ const embed = resource.videoUrl ? youtubeEmbedUrl(resource.videoUrl) : "";
       <div class="btn-row" style="margin: 1.25rem 0 1.75rem">
         {
           resource.file && (
-            <a class="btn btn-primary" href={resource.file.url} download>
+            <a
+              class="btn btn-primary"
+              href={resource.file.url}
+              download
+              data-analytics="resource_click"
+              data-resource-title={resource.title}
+              data-resource-action="download"
+              data-resource-group={resource.productLine || ""}
+              data-resource-type={resource.type || ""}
+            >
               Download PDF
             </a>
           )
