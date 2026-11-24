@@ -1,6 +1,18 @@
 # vinylast.com
 
-Contractor site for Vinylast Inc. — Astro static site, Contentful for products/resources, Netlify hosting.
+Contractor site for Vinylast Inc. The site is a static Astro build. Source code is in this GitHub repository. Netlify hosts the site. Contentful holds categories, products, and resources.
+
+## How updates reach the site
+
+Contentful is read only when Netlify builds. Visitors do not call Contentful.
+
+Two things start a build:
+
+**Code.** Netlify is connected to this GitHub repository. A push to the production branch (`templates`) runs `npm run build` and Netlify publishes the `dist` folder.
+
+**Content.** An editor updates a Category, Product, or Resource in Contentful and publishes or unpublishes the entry. A Contentful webhook calls a Netlify build hook, which runs the same build. The site shows the new content after that build finishes.
+
+Webhook setup is in [Contentful → Netlify rebuild](#contentful--netlify-rebuild) below.
 
 ## Local development
 
@@ -43,10 +55,12 @@ Publish entries, then trigger a Netlify rebuild (see webhook below).
 
 ## Contentful → Netlify rebuild
 
+This connection is already in place on the live site. To recreate it:
+
 1. Netlify → Site configuration → Build & deploy → Build hooks → add a hook (e.g. “Contentful publish”).
 2. Contentful → Settings → Webhooks → add that URL for **Entry publish** / **unpublish** (and Asset publish if you want image-only edits to rebuild).
 
-Editors can update products and PDFs in Contentful; the site updates after the build finishes.
+Editors update categories, products, and resources (including PDFs) in Contentful. The site updates after the build finishes.
 
 ## Contact form
 
@@ -72,5 +86,5 @@ ezpostpocket.com is unchanged.
 ## Stack
 
 - Astro (static HTML)
-- Contentful (products + resources)
-- Netlify (hosting + forms)
+- GitHub (source) → Netlify (hosting, builds, forms)
+- Contentful (categories, products, and resources)
